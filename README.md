@@ -21,6 +21,6 @@ Quand un fichier traduit est validé par pull request, on le met à jour dans le
 
 `vuejs-fr/vue-ssr-docs:master` --> `vuejs/vue-ssr-docs:master`
 
-ainsi le dossier officiel hébergeant la documentation possède bien le dossier `fr` en français et le dosser `en` en anglais.
+ainsi le dossier officiel hébergeant la documentation possède bien le dossier `fr` en français et le dossier `en` en anglais.
 
 Note : il peut être intéressant de faire une pull request par ficher validé et donc de créer une branche dérivée de `vuejs-fr/vue-ssr-docs:master` pour faire la pull request (`vuejs-fr/vue-ssr-docs:master` --> `vuejs-fr/vue-ssr-docs:only_one_changed_file_from_master` --> `vuejs/vue-ssr-docs:master`)
