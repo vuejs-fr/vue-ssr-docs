@@ -1,4 +1,4 @@
-# Basic Usage
+# Utilisation de base
 
 ## Installation
 
@@ -6,37 +6,37 @@
 npm install vue vue-server-renderer --save
 ```
 
-We will be using NPM throughout the guide, but feel free to use [Yarn](https://yarnpkg.com/en/) instead.
+Nous allons utiliser NPM tout au long de ce guide, n'hésitez pas à utiliser [Yarn](https://yarnpkg.com/en/) à la place.
 
 #### Notes
 
-- It's recommended to use Node.js version 6+.
-- `vue-server-renderer` and `vue` must have matching versions.
-- `vue-server-renderer` relies on some Node.js native modules and therefore can only be used in Node.js. We may provide a simpler build that can be run in other JavaScript runtimes in the future.
+- Il est recommandé d'utiliser une version 6 et supérieur de Node.js
+- `vue-server-renderer` et `vue` doivent utiliser des numéros de version identiques.
+- `vue-server-renderer` utilise plusieurs modules Node.js natifs fournis uniquement par Node.js. Nous fournirons une version exécutable qui pourra tourner sur les autres moteurs JavaScript dans le futur.
 
-## Rendering a Vue Instance
+## Faire le rendu d'une instance de Vue
 
 ``` js
-// Step 1: Create a Vue instance
+// Étape 1 : créer une instance de Vue
 const Vue = require('vue')
 const app = new Vue({
   template: `<div>Hello World</div>`
 })
 
-// Step 2: Create a renderer
+// Étape 2 : créer un générateur de rendu
 const renderer = require('vue-server-renderer').createRenderer()
 
-// Step 3: Render the Vue instance to HTML
+// Étape 3 : faire le rendu de l'instance en HTML
 renderer.renderToString(app, (err, html) => {
   if (err) throw err
   console.log(html)
-  // => <div data-server-rendered="true">hello world</div>
+  // => <div data-server-rendered="true">Hello World</div>
 })
 ```
 
-## Integrating with a Server
+## Intégration avec un serveur
 
-It is pretty straightforward when used inside a Node.js server, for example [Express](https://expressjs.com/):
+Il est plus simple d'utiliser le code précédent avec un serveur Node.js, comme par exemple [Express](https://expressjs.com/) :
 
 ``` bash
 npm install express --save
@@ -52,18 +52,18 @@ server.get('*', (req, res) => {
     data: {
       url: req.url
     },
-    template: `<div>The visited URL is: {{ url }}</div>`
+    template: `<div>L'URL visitée est : {{ url }}</div>`
   })
 
   renderer.renderToString(app, (err, html) => {
     if (err) {
-      res.status(500).end('Internal Server Error')
+      res.status(500).end('Erreur interne du serveur')
       return
     }
     res.end(`
       <!DOCTYPE html>
       <html lang="en">
-        <head><title>Hello</title></head>
+        <head><title>Bonjour</title></head>
         <body>${html}</body>
       </html>
     `)
@@ -73,25 +73,25 @@ server.get('*', (req, res) => {
 server.listen(8080)
 ```
 
-## Using a Page Template
+## Utiliser un modèle de page
 
-When you render a Vue app, the renderer only generates the markup of the app. In the example we had to wrap the output with an extra HTML page shell.
+Quand vous faites le rendu d'une application Vue, le générateur de rendu fournit uniquement les balises de votre application. Dans cet exemple, nous allons ajouter de part et d'autre la structure HTML nécessaire à toutes pages.
 
-To simplify this, you can directly provide a page template when creating the renderer. Most of the time we will put the page template in its own file, e.g. `index.template.html`:
+Le plus simple est de directement fournir un modèle de page lors de la création du générateur de rendu. La plupart du temps, nous allons mettre le modèle de page dans son propre fichier. Par ex. `index.template.html` :
 
 ``` html
 <!DOCTYPE html>
 <html lang="en">
-  <head><title>Hello</title></head>
+  <head><title>Bonjour</title></head>
   <body>
     <!--vue-ssr-outlet-->
   </body>
 </html>
 ```
 
-Notice the `<!--vue-ssr-outlet-->` comment -- this is where your app's markup will be injected.
+Notez que le commentaire `<!--vue-ssr-outlet-->` représente la zone où les balises de votre application vont être injectées.
 
-We can then read and pass the file to the Vue renderer:
+Nous allons ensuite lire et passer le contenu du fichier au générateur de rendu de Vue :
 
 ``` js
 const renderer = createRenderer({
@@ -99,19 +99,19 @@ const renderer = createRenderer({
 })
 
 renderer.renderToString(app, (err, html) => {
-  console.log(html) // will be the full page with app content injected.
+  console.log(html) // sera la page complète avec le contenu de l'application injecté.
 })
 ```
 
-### Template Interpolation
+### Interpolation dans le modèle de page
 
-The template also supports simple interpolation. Given the following template:
+Le modèle de page supporte également une interpolation simple. Avec le modèle de page suivant :
 
 ``` html
 <html>
   <head>
-    <title>{{ title }}</title>
-    {{{ meta }}}
+    <title>{\{ title }}</title>
+    {\{\{ meta }}}
   </head>
   <body>
     <!--vue-ssr-outlet-->
@@ -119,11 +119,11 @@ The template also supports simple interpolation. Given the following template:
 </html>
 ```
 
-We can provide interpolation data by passing a "render context object" as the second argument to `renderToString`:
+Nous pouvons fournir les données d'interpolation suivantes à travers un « objet de contexte de rendu » en tant que second argument de `renderToString` :
 
 ``` js
 const context = {
-  title: 'hello',
+  title: 'Bonjour',
   meta: `
     <meta ...>
     <meta ...>
@@ -131,17 +131,17 @@ const context = {
 }
 
 renderer.renderToString(app, context, (err, html) => {
-  // page title will be "hello"
-  // with meta tags injected
+  // le titre de la page sera « Bonjour »
+  // avec les balises <meta> injectées
 })
 ```
 
-The `context` object can also be shared with the Vue app instance, allowing components to dynamically register data for template interpolation.
+L'objet `context` peut également être partagé avec l'instance de l'application de Vue, permettant aux composants de dynamiquement fournir des données pour l'interpolation du modèle de page.
 
-In addition, the template supports some advanced features such as:
+De plus, le modèle de page supporte des fonctionnalités avancées comme :
 
-- Auto injection of critical CSS when using `*.vue` components;
-- Auto injection of asset links and resource hints when using `clientManifest`;
-- Auto injection and XSS prevention when embedding Vuex state for client-side hydration.
+- l'injection automatique de CSS critique lors de l'utilisation de composants `*.vue`,
+- l'injection automatique de balises `<link>` avec l'utilisation de `clientManifest`,
+- l'injection automatique de l'état de Vuex pour l'hydratation cliente avec prévention XSS.
 
-We will discuss these when we introduce the associated concepts later in the guide.
+Nous discuterons de cela quand nous introduirons ces concepts plus tard dans le guide.
