@@ -1,6 +1,6 @@
-# vue-ssr-docs
+# Pour traduire la documentation de vue-ssr-docs
 
-### Traduction
+### Workflow de travail
 
 Cette branche de travail `working` est volontairement mise en avant et doit uniquement être mise à jour dans le sens :
 
@@ -14,6 +14,10 @@ git merge upstream/master
 ```
 
 d'obtenir des conflits **sur les pages déjà traduites** et ainsi maintenir la documentation à jour en fonction des modifications à travers **les documents déjà traduits**.
+
+### Traduction
+
+Pour savoir ce qui est [en cours de traduction](https://github.com/vuejs-fr/vue-ssr-docs/issues/2) ou [comment traduire un fichier](https://github.com/vuejs-fr/vue-ssr-docs/issues/3), référez vous aux issues correspondantes.
 
 ### Reverssement
 
