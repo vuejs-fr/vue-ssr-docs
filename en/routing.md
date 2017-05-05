@@ -53,7 +53,7 @@ Maintenant, il faut implémenter la logique des routes côté serveur dans `entr
 import { createApp } from './app'
 
 export default context => {
-  // vu qu'il peut potentiellement avoir des composants ou des connecteurs
+  // vu qu'il peut potentiellement avoir des composants ou des hooks
   // de routes asynchrones, on retourne une Promise de telle sorte que
   // le serveur patiente jusqu'à ce que tout soit prêt pour le rendu.
   return new Promise((resolve, reject) => {
@@ -63,7 +63,7 @@ export default context => {
     router.push(context.url)
 
     // on attend que le routeur ait terminé de traiter avec les composants et 
-    // connecteurs asynchrones    
+    // hooks asynchrones    
     router.onReady(() => {
       const matchedComponents = router.getMatchedComponents()
       // pas de routes correspondantes, on rejette la requête avec une 404
@@ -107,7 +107,7 @@ server.get('*', (req, res) => {
 
 ## Fragmentation du code
 
-La séparation du code, ou les parties *lazy-loadées* de votre application, aide à réduire la quantité de ressources qui a besoin d'être téléchargée par le navigateur pour le rendu initial, et peut grandement améliorer le TTI (time-to-interactive) pour les grosses applications. Le but est de "charger uniquement ce qui est nécessaire" pour l'écran initial.
+La séparation du code, ou les parties chargées à la volée de votre application, aide à réduire la quantité de ressources qui a besoin d'être téléchargée par le navigateur pour le rendu initial, et peut grandement améliorer le TTI (time-to-interactive) pour les grosses applications. Le but est de "charger uniquement ce qui est nécessaire" pour l'écran initial.
 
 Vue permet de créer des composants asynchrones (concept de *first-class*), en les combinant avec [le support de webpack 2 pour l'utilisation de l'importation dynamique pour fragmenter le code](https://webpack.js.org/guides/code-splitting-async/), tout ce que vous avez à faire est :
 
