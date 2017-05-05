@@ -1,4 +1,4 @@
-# Streaming
+# Envoi par flux (En) <br><br> *Cette page est en cours de traduction française. Revenez une autre fois pour lire une traduction achevée ou [participez à la traduction française ici](https://github.com/vuejs-fr/vue-ssr-docs).*
 
 `vue-server-renderer` supports stream rendering out of the box, for both the base renderer and the bundle renderer. All you need to do is use `renderToStream` instead of `renderToString`:
 

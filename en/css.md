@@ -1,4 +1,4 @@
-# CSS Management
+# Gestion des CSS (En) <br><br> *Cette page est en cours de traduction française. Revenez une autre fois pour lire une traduction achevée ou [participez à la traduction française ici](https://github.com/vuejs-fr/vue-ssr-docs).*
 
 The recommended way to manage CSS is to simply use `<style>` inside `*.vue` single file components, which offers:
 

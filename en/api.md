@@ -1,4 +1,4 @@
-# API Reference
+# Réference de l'API (En) <br><br> *Cette page est en cours de traduction française. Revenez une autre fois pour lire une traduction achevée ou [participez à la traduction française ici](https://github.com/vuejs-fr/vue-ssr-docs).*
 
 ## `createRenderer([options])`
 
@@ -212,7 +212,7 @@ See [Introducing the Server Bundle](./bundle-renderer.md) and [Build Configurati
 
   As an example, check out [`v-show`'s server-side implementation](https://github.com/vuejs/vue/blob/dev/src/platforms/web/server/directives/show.js).
 
-## Webpack Plugins
+## webpack Plugins
 
 The webpack plugins are provided as standalone files and should be required directly:
 

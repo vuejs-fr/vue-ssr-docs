@@ -1,4 +1,4 @@
-# Client Side Hydration
+# Hydratation côté client (En) <br><br> *Cette page est en cours de traduction française. Revenez une autre fois pour lire une traduction achevée ou [participez à la traduction française ici](https://github.com/vuejs-fr/vue-ssr-docs).*
 
 In `entry-client.js`, we are simply mounting the app with this line:
 

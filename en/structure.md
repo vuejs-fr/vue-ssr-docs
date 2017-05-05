@@ -1,4 +1,4 @@
-# Source Code Structure
+# Structure de code (En) <br><br> *Cette page est en cours de traduction française. Revenez une autre fois pour lire une traduction achevée ou [participez à la traduction française ici](https://github.com/vuejs-fr/vue-ssr-docs).*
 
 ## Avoid Stateful Singletons
 
@@ -57,7 +57,7 @@ So the basic idea is we will be using webpack to bundle our app for both client 
 
 We will discuss the details of the setup in later sections - for now, let's just assume we've got the build setup figured out and we can write our Vue app code with webpack enabled.
 
-## Code Structure with Webpack
+## Code Structure with webpack
 
 Now that we are using webpack to process the app for both server and client, the majority of our source code can be written in a universal fashion, with access to all the webpack-powered features. At the same time, there are [a number of things](./universal.md) you should keep in mind when writing universal code.
 
