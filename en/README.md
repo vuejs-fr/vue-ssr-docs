@@ -1,50 +1,50 @@
-# Guide du rendu côté serveur avec Vue.js (En) <br><br> *Cette page est en cours de traduction française. Revenez une autre fois pour lire une traduction achevée ou [participez à la traduction française ici](https://github.com/vuejs-fr/vue-ssr-docs).*
+# Guide du rendu côté serveur avec Vue.js
 
-> **Note:** this guide requires the following minimum versions of Vue and supporting libraries:
+> **Note :** Ce guide nécessite les versions de Vue et de ses bibliothèques de support suivantes :
 > - vue & vue-server-renderer >= 2.3.0
 > - vue-router >= 2.5.0
 > - vue-loader >= 12.0.0 & vue-style-loader >= 3.0.0
 
-> If you have previously used Vue 2.2 with SSR, you will notice that the recommended code structure is now [a bit different](./structure.md) (with the new [runInNewContext](./api.md#runinnewcontext) option set to `false`). Your existing app should continue to work, but it's recommended to migrate to the new recommendations.
+> Si vous avez déjà utilisé le rendu côté serveur (SSR pour *Server-Side Rendering*) avec Vue 2.2, vous vous apercevrez que la structure de code recommandée est maintenant [légèrement différente](./structure.md) (avec la nouvelle option [runInNewContext](./api.md#runinnewcontext) mise à `false`). Votre application devrait continuer à fonctionner, mais il est recommandé de migrer vers les nouvelles recommandations.
 
-## What is Server-Side Rendering (SSR)?
+## Le rendu côté serveur ou SSR, qu'est-ce que c'est ?
 
-Vue.js is a framework for building client-side applications. By default, Vue  components produce and manipulate DOM in the browser as output. However, it is also possible to render the same components into HTML strings on the server, send them directly to the browser, and finally "hydrate" the static markup into a fully interactive app on the client.
+Vue.js est un framework pour créer des applications côté client. Par défaut, Vue génère en sortie un DOM manipulable dans le navigateur. Il est cependant également possible de faire le rendu des mêmes composants sous forme de chaîne de caractères HTML côté serveur, de les envoyer directement au navigateur et d'« hydrater » les balises statiques fournies en une application cliente pleinement interactive.
 
-A server-rendered Vue.js app can also be considered "isomorphic" or "universal", in the sense that the majority of your app's code runs on both the server **and** the client.
+Une application Vue.js rendue du côté serveur peut également être considérée comme « isomorphique » ou « universelle », dans le sens où la majorité du code est exécutable côté serveur **et** coté client.
 
-## Why SSR?
+## Pourquoi faire du SSR ?
 
-Compared to a traditional SPA (Single-Page Application), the advantage of SSR primarily lies in:
+En comparaison des applications monopages traditionnelles (SPA pour *Single-Page Application*), l'avantage du SSR se manifeste dans :
 
-- Better SEO, as the search engine crawlers will directly see the fully rendered page.
+- de meilleures optimisations pour les moteurs de recherche (SEO pour *Search Engine Optimisations*), ainsi les moteurs d'indexation voient directement le rendu complet de la page.
 
-  Note that as of now, Google and Bing can index synchronous JavaScript applications just fine. Synchronous being the key word there. If your app starts with a loading spinner, then fetches content via Ajax, the crawler will not wait for you to finish. This means if you have content fetched asynchronously on pages where SEO is important, SSR might be necessary.
+  À noter qu'à présent, Google et Bing savent parfaitement indexer des applications JavaScript synchrones. Synchrone est le mot important ici. Si votre application débute avec une animation de chargement, puis va chercher le contenu via Ajax, l'indexeur n'attendra pas que cette action soit finie. Cela signifie que si vous avez du contenu asynchrone injecté sur des pages ou la SEO est importante, du SSR serait nécessaire.
 
-- Faster time-to-content, especially on slow internet or slow devices. Server-rendered markup doesn't need to wait until all JavaScript has been downloaded and executed to be displayed, so your user will see a fully-rendered page sooner. This generally results in better user experience, and can be critical for applications where time-to-content is directly associated with conversion rate.
+- de meilleurs temps d'accès au contenu, en particulier pour les connexions Internet lentes ou les appareils lents. Le rendu des balises côté serveur n'a pas besoin d'attendre le chargement de tous les fichiers JavaScript pour que le code soit exécuté en vue d'être affiché. Ainsi votre utilisateur verra apparaître une page complètement rendue très tôt. Cela conduit généralement à une meilleure expérience utilisateur, ce qui peut-être critique pour les applications où le temps d'accès au contenu est directement lié au taux de conversion.
 
-There are also some trade-offs to consider when using SSR:
+Il y a aussi des contraintes à prendre en considération quand on utilise du SSR :
 
-- Development constraints. Browser-specific code can only be used inside certain lifecycle hooks; some external libraries may need special treatment to be able to run in a server-rendered app.
+- Des contraintes de développement. Le code spécifique aux navigateurs ne peut être utilisé que dans certains points d'ancrage (hooks) ; plusieurs bibliothèques nécessites une utilisation particulière pour être capable d'être exécutées dans une application côté serveur.
 
-- More involved build setup and deployment requirements. Unlike a fully static SPA that can be deployed on any static file server, a server-rendered app requires an environment where a Node.js server can run.
+- Il y a plus d'étapes de compilation avant démarrage et de déploiement requises. Contrairement à une SPA qui peut être déployée sur un serveur de fichiers statiques, une application rendue côté serveur nécessite un environnement où un serveur Node.js peut tourner.
 
-- More server-side load. Rendering a full app in Node.js is obviously going to be more CPU-intensive than just serving static files, so if you expect high traffic, be prepared for corresponding server load and wisely employ caching strategies.
+- Plus de charge côté serveur. Faire le rendue d'une application complète en Node.js est évidemment une tâche demandant plus de CPU que de simplement renvoyer des fichiers statiques. Aussi si vous vous attendez à un fort trafique, préparez-vous un serveur tenant la charge et utilisez astucieusement des stratégies de mise en cache.
 
-Before using SSR for your app, the first question you should ask it whether you actually need it. It mostly depends on how important time-to-content is for your app. For example, if you are building an internal dashboard where an extra few hundred milliseconds on initial load doesn't matter that much, SSR would be an overkill. However, in cases where time-to-content is absolutely critical, SSR can help you achieve the best possible initial load performance.
+Avant d'utiliser du SSR pour vos applications, la première question que vous devriez vous poser est si vous en avez réellement besoin. Cela dépendra de l'importance du temps d'accès au contenu pour votre application. Par exemple, si vous créez une interface d'administration avec un chargement initial de quelques secondes cela importe peu ; du SSR n'aurait pas de pertinence dans ce cas. Cependant, dans le cas où l'accès au contenu est une priorité absolue, du SSR peut vous aider à obtenir les meilleures performances de chargement initial.
 
-## SSR vs Prerendering
+## Rendu côté serveur vs. pré-rendu
 
-If you're only investigating SSR to improve the SEO of a handful of marketing pages (e.g. `/`, `/about`, `/contact`, etc), then you probably want __prerendering__ instead. Rather than using a web server to compile HTML on-the-fly, prerendering simply generates static HTML files for specific routes at build time. The advantage is setting up prerendering is much simpler and allows you to keep your frontend as a fully static site.
+Si vous envisagez d'utiliser du SSR seulement pour améliorer votre SEO sur des pages informatives à valeur ajoutée (par ex. `/`, `/about`, `/contact`, etc), alors vous devriez plutôt utiliser du pré-rendu. Plutôt que d'utiliser un serveur web pour compiler le HTML en temps réel, faites le simple pré-rendu de vos pages statiques en HTML pour des routes bien spécifiques lors d'une phase de pré-compilation. L'avantage est que faire du pré-rendu est plus simple et vous permet de garder un site avec une partie cliente statique.
 
-If you're using webpack, you can easily add prerendering with the [prerender-spa-plugin](https://github.com/chrisvfritz/prerender-spa-plugin). It's been extensively tested with Vue apps - and in fact, [the creator](https://github.com/chrisvfritz) is a member of the Vue core team.
+Si vous utilisez webpack, vous pouvez facilement ajouter du pré-rendu avec le plugin [prerender-spa-plugin](https://github.com/chrisvfritz/prerender-spa-plugin). Il a particulièrement bien été testé avec des applications Vue (en fait, [son créateur](https://github.com/chrisvfritz) est lui-même un membre de l'équipe principale de Vue).
 
-## About This Guide
+## À propos de ce guide
 
-This guide is focused on server-rendered Single-Page Applications using Node.js as the server. Mixing Vue SSR with other backend setups is a topic of its own and is not covered in this guide.
+Ce guide est dédié au rendu côté serveur des applications monopages utilisant Node.js en tant que serveur web. Utiliser le SSR de Vue avec une autre configuration serveur est un sujet qui ne sera pas abordé dans ce guide.
 
-This guide will be very in-depth and assumes you are already familiar with Vue.js itself, and have decent working knowledge of Node.js and webpack. If you prefer a higher-level solution that provides a smooth out-of-the-box experience, you should probably give [Nuxt.js](http://nuxtjs.org/) a try. It's built upon the same Vue stack but abstracts away a lot of the boilerplate, and provides some extra features such as static site generation. However, it may not suit your use case if you need more direct control of your app's structure. Regardless, it would still be beneficial to read through this guide to better understand how things work together.
+Ce guide va réellement entrer dans le détail et présuppose que vous êtes déjà familiarisé avec Vue.js et que vous avez un niveau de connaissance correcte concernant Node.js et webpack. Si vous préférez une solution de haut niveau fournissant une expérience de développement prête à l'emploi, vous devriez probablement essayer [Nuxt.js](http://nuxtjs.org/). Il est construit par-dessus l'écosystème de Vue et vous fourni des éléments préconçus ainsi que des fonctionnalités supplémentaires pour générer des sites web statiques. Il ne vous conviendra cependant pas si vous souhaitez avoir un contrôle plus direct sur la structure de votre application. Dans tous les cas, il reste toujours intéressant de parcourir ce guide pour mieux comprendre comment chaque élément fonctionne avec le reste.
 
-As you read along, it would be helpful to refer to the official [HackerNews Demo](https://github.com/vuejs/vue-hackernews-2.0/), which makes use of most of the techniques covered in this guide.
+Au fil de votre lecture, il peut être intéressant également de vous référer à la [démo HackerNews](https://github.com/vuejs/vue-hackernews-2.0/) qui utilise bon nombre des techniques expliquées dans ce guide.
 
-Finally, note that the solutions in this guide are not definitive - we've found them to be working well for us, but that doesn't mean they cannot be improved. They might get revised in the future - and feel free to contribute by submitting pull requests!
+Pour finir, notez que les solutions de ce guide ne sont pas définitives. Nous avons trouvé que cela fonctionnait bien pour nous, mais cela ne veut pas dire qu'il n'y a pas d'améliorations à faire. Nous pourrons les réviser dans le futur. N'hésitez donc pas à y contribuer en soumettant des pull requests !
