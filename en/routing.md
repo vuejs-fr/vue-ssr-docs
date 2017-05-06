@@ -107,9 +107,9 @@ server.get('*', (req, res) => {
 
 ## Fragmentation du code
 
-La séparation du code, ou les parties chargées à la volée de votre application, aide à réduire la quantité de ressources qui a besoin d'être téléchargée par le navigateur pour le rendu initial, et peut grandement améliorer le TTI (time-to-interactive) pour les grosses applications. Le but est de "charger uniquement ce qui est nécessaire" pour l'écran initial.
+La fragmentation du code, ou les parties chargées à la volée de votre application, aide à réduire la quantité de ressources qui a besoin d'être téléchargée par le navigateur pour le rendu initial, et peut grandement améliorer le TTI (time-to-interactive) pour les grosses applications. Le but est de "charger uniquement ce qui est nécessaire" pour l'écran initial.
 
-Vue permet de créer des composants asynchrones (concept de *first-class*), en les combinant avec [le support de webpack 2 pour l'utilisation de l'importation dynamique pour fragmenter le code](https://webpack.js.org/guides/code-splitting-async/), tout ce que vous avez à faire est :
+Vue permet de créer des composants asynchrones en respectant le concept d'[objet de première classe](https://fr.wikipedia.org/wiki/Objet_de_premi%C3%A8re_classe). En les combinant avec [le support de webpack 2 pour l'utilisation de l'importation dynamique pour fragmenter le code](https://webpack.js.org/guides/code-splitting-async/), tout ce que vous avez à faire est :
 
 ``` js
 // changer ça :
@@ -119,7 +119,7 @@ import Foo from './Foo.vue'
 const Foo = () => import('./Foo.vue')
 ```
 
-Cela fonctionnera dans n'importe quel scénario si vous êtes en train de faire une application Vue uniquement pour le côté client. Toutefois, il y aura certaines limitations en l'utilisant dans du SSR. Premièrement, il faut *résoudre* tous les composants asynchrones à l'avance sur le serveur avant de faire le rendu, car sinon il y aura juste un emplacement vide dans le code HTML. Pour le côté client, il faut aussi faire cela avant de commencer l'hydratation des données, sinon il y aurait des erreurs d'incompatibilités sur le contenu.
+Cela fonctionnera dans n'importe quel scénario si vous êtes en train de faire une application Vue uniquement pour le côté client. Toutefois, il y aura certaines limitations en l'utilisant dans du SSR. Premièrement, il faut résoudre tous les composants asynchrones à l'avance sur le serveur avant de faire le rendu, car sinon il y aura juste un emplacement vide dans le code HTML. Pour le côté client, il faut aussi faire cela avant de commencer l'hydratation des données, sinon il y aurait des erreurs d'incompatibilités sur le contenu.
 
 Tout cela rend un peu compliqué l'utilisation des composants asynchrones à des endroits spécifiques dans votre application (nous allons probablement améliorer cela dans le futur). Toutefois, **cela fonctionne parfaitement si vous le faites au niveau de la route** - c.-à-d. d'utiliser les composants asynchrones dans la configuration des routes - car `vue-router` ira automatiquement résoudre les composants asynchrones nécessaires au bon fonctionnement de la route. Vous devez être sûr d'utiliser `router.onReady` sur le serveur et le client. Nous l'avons déjà fait pour le fichier d'entrée du serveur, il ne nous reste plus maintenant qu'à faire de même pour le fichier d'entrée du client :
 
