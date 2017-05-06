@@ -107,7 +107,7 @@ server.get('*', (req, res) => {
 
 ## Scission du code
 
-La scission du code, ou les parties chargées à la volée de votre application, aide à réduire la quantité de ressources qui a besoin d'être téléchargée par le navigateur pour le rendu initial, et peut grandement améliorer le TTI (time-to-interactive) pour les grosses applications. Le but est de "charger uniquement ce qui est nécessaire" pour l'écran initial.
+La scission du code, ou les parties chargées à la volée de votre application, aide à réduire la quantité de ressources qui a besoin d'être téléchargée par le navigateur pour le rendu initial, et peut grandement améliorer le TTI (time-to-interactive) pour les grosses applications. Le but est de « charger uniquement ce qui est nécessaire » pour l'écran initial.
 
 Vue permet de créer des composants asynchrones en respectant le concept d'[objet de première classe](https://fr.wikipedia.org/wiki/Objet_de_premi%C3%A8re_classe). En les combinant avec [le support de webpack 2 pour l'utilisation de l'importation dynamique pour scinder le code](https://webpack.js.org/guides/code-splitting-async/), tout ce que vous avez à faire est :
 
