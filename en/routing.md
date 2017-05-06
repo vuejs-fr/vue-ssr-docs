@@ -54,7 +54,7 @@ import { createApp } from './app'
 
 export default context => {
   // vu qu'il peut potentiellement avoir des composants ou des hooks
-  // de routes asynchrones, on retourne une Promise de telle sorte que
+  // de routes asynchrones, on retourne une Promesse (« Promise ») de telle sorte que
   // le serveur patiente jusqu'à ce que tout soit prêt pour le rendu.
   return new Promise((resolve, reject) => {
     const { app, router } = createApp()
@@ -71,7 +71,7 @@ export default context => {
         reject({ code: 404 })
       }
 
-      // la Promise doit résoudre l'instance de l'application, qui pourra 
+      // la Promise doit résoudre l'instance de l'application qui pourra 
       // ensuite être rendue
       resolve(app)
     }, reject)
@@ -93,9 +93,9 @@ server.get('*', (req, res) => {
     renderer.renderToString(app, (err, html) => {
       if (err) {
         if (err.code === 404) {
-          res.status(404).end('Page not found')
+          res.status(404).end('Page non trouvée')
         } else {
-          res.status(500).end('Internal Server Error')
+          res.status(500).end('Erreur interne du serveur')
         }
       } else {
         res.end(html)
@@ -119,7 +119,7 @@ import Foo from './Foo.vue'
 const Foo = () => import('./Foo.vue')
 ```
 
-Cela fonctionnera dans n'importe quel scénario si vous êtes en train de faire une application Vue uniquement pour le côté client. Toutefois, il y aura certaines limitations en l'utilisant dans du SSR. Premièrement, il faut résoudre tous les composants asynchrones à l'avance sur le serveur avant de faire le rendu, car sinon il y aura juste un emplacement vide dans le code HTML. Pour le côté client, il faut aussi faire cela avant de commencer l'hydratation des données, sinon il y aurait des erreurs d'incompatibilités sur le contenu.
+Cela fonctionnera dans n'importe quel scénario si vous êtes en train de faire une application Vue uniquement pour le côté client. Toutefois, il y aura certaines limitations en l'utilisant avec du SSR. Premièrement, il faut résoudre tous les composants asynchrones à l'avance sur le serveur avant de faire le rendu, car sinon il y aura juste un emplacement vide dans le code HTML. Pour le côté client, il faut aussi faire cela avant de commencer l'hydratation des données, sinon il y aurait des erreurs d'incompatibilités sur le contenu.
 
 Tout cela rend un peu compliqué l'utilisation des composants asynchrones à des endroits spécifiques dans votre application (nous allons probablement améliorer cela dans le futur). Toutefois, **cela fonctionne parfaitement si vous le faites au niveau de la route** - c.-à-d. d'utiliser les composants asynchrones dans la configuration des routes - car `vue-router` ira automatiquement résoudre les composants asynchrones nécessaires au bon fonctionnement de la route. Vous devez être sûr d'utiliser `router.onReady` sur le serveur et le client. Nous l'avons déjà fait pour le fichier d'entrée du serveur, il ne nous reste plus maintenant qu'à faire de même pour le fichier d'entrée du client :
 
