@@ -36,7 +36,7 @@ export function createApp () {
   const router = createRouter()
 
   const app = new Vue({
-    // injection du routeur dans l'instance de Vue
+    // injecte le routeur dans l'instance de Vue
     router,
     render: h => h(App)
   })
