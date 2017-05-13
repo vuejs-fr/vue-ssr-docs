@@ -1,6 +1,6 @@
 # Écrire du code universel
 
-Avant d'aller plus loin, prenons un moment pour discuter des contraintes lorsque l'on écrit du code « universel » - c'est à dire du code qui s'exécute à la fois côté serveur et côté client. En raison des différences d'API entre les deux plate-formes, le comportement de notre code ne sera pas exactement le même selon l'environnement. Nous allons examiner les points clés dont vous devez avoir connaissance.
+Avant d'aller plus loin, prenons un moment pour discuter des contraintes lorsque l'on écrit du code « universel » - c'est à dire du code qui s'exécute à la fois côté serveur et côté client. En raison des différences d'API entre les deux plateformes, le comportement de notre code ne sera pas exactement le même selon l'environnement. Nous allons examiner les points clés dont vous devez avoir connaissance.
 
 ## Réactivité des données côté serveur
 
@@ -12,11 +12,11 @@ Etant donné que le processus de rendu actuel doit être déterministe, nous all
 
 Vu qu'il n'y a pas de mises à jour dynamiques, de tous les hooks de cycles de vie, seuls `beforeCreate` et `created` seront appelés pendant le rendu côté serveur. Cela signifie que tout code présent dans d'autres hooks tels que `beforeMount` ou `mounted` sera exécuté uniquement côté client.
 
-## Accès aux APIs spécifiques à la plate-forme
+## Accès aux APIs spécifiques à la plateforme
 
-Le code universel ne peut pas accéder aux APIs spécifiques à une plate-forme. Ainsi, si votre code utilise directement les variables globales exclusives au navigateur comme `window` ou `document`, elles lèveront des erreurs si elles sont exécutées sur Node.js, et vice-versa.
+Le code universel ne peut pas accéder aux APIs spécifiques à une plateforme. Ainsi, si votre code utilise directement les variables globales exclusives au navigateur comme `window` ou `document`, elles lèveront des erreurs si elles sont exécutées sur Node.js, et vice-versa.
 
-Pour les tâches partagées entre le serveur et le client, mais qui utilisent des APIs différentes selon la plate-forme, il est recommandé d'encapsuler le code spécifique à la plate-forme dans une API universelle, ou d'utiliser des bibliothèques qui le font pour vous. Par exemple, [axios](https://github.com/mzabriskie/axios) est un client HTTP qui présente la même API côté serveur et côté client.
+Pour les tâches partagées entre le serveur et le client, mais qui utilisent des APIs différentes selon la plateforme, il est recommandé d'encapsuler le code spécifique à la plateforme dans une API universelle, ou d'utiliser des bibliothèques qui le font pour vous. Par exemple, [axios](https://github.com/mzabriskie/axios) est un client HTTP qui présente la même API côté serveur et côté client.
 
 Pour les APIs exclusives au navigateur, l'approche habituelle est de les utiliser dans les hooks de cycle de vie exclusifs au client.
 
