@@ -2,7 +2,7 @@
 
 ## Eviter les singletons d'état
 
-Lors de l'écriture du code exclusif au client, nous sommes habitués au fait que notre code sera interprété dans un nouveau contexte à chaque fois. Cependant, un serveur Node.js est un processus au long cours. Quand notre code est appelé dans le processus, il sera interprété une fois et restera en mémoire. Cela signifie que si vous créez un singleton, il sera partagé entre chaque nouvelle requête.
+Lors de l'écriture du code exclusif au client, nous sommes habitués au fait que notre code sera interprété dans un nouveau contexte à chaque fois. Cependant, un serveur Node.js est un processus qui reste actif. Quand notre code est appelé dans le processus, il sera interprété une fois et restera en mémoire. Cela signifie que si vous créez un singleton, il sera partagé entre chaque nouvelle requête.
 
 Comme vu dans l'exemple de base, nous **créons une nouvelle instance de Vue principale pour chaque requête.** Cela est similaire au fait que chaque utilisateur utilise une nouvelle instance de l'application dans son propre navigateur. Si nous utilisons une instance partagée entre plusieurs requêtes, nous prenons le risque d'une pollution d'état entre requêtes.
 
