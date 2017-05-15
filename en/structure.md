@@ -101,7 +101,7 @@ L'entrée client crée simplement l'application et l'attache au DOM :
 ``` js
 import { createApp } from './app'
 
-// logique de démarrage spécifique client
+// logique de démarrage spécifique au client
 
 const { app } = createApp()
 
