@@ -12,6 +12,8 @@ Etant donné que le processus de rendu actuel doit être déterministe, nous all
 
 Vu qu'il n'y a pas de mises à jour dynamiques, de tous les hooks de cycles de vie, seuls `beforeCreate` et `created` seront appelés pendant le rendu côté serveur. Cela signifie que tout code présent dans d'autres hooks tels que `beforeMount` ou `mounted` sera exécuté uniquement côté client.
 
+Une autre chose a noter est que vous devriez éviter la création d'effets de bord globaux dans `beforeCreate` et `created` comme ceux, par exemple, dus aux timers avec `setInterval`. Nous pouvons mettre en place des timers seulement dans du code côté client qui seront arrêtés pendant les phases `beforeDestroy` et `destroyed`. Cependant, comme ces hooks ne sont jamais appelés pendant le SSR, les timers vont continuer de tourner éternellement. Pour éviter cela, déplacez ce type d'effet de bord dans les hooks `beforeMount` ou `mounted`.
+
 ## Accès aux APIs spécifiques à la plateforme
 
 Le code universel ne peut pas accéder aux APIs spécifiques à une plateforme. Ainsi, si votre code utilise directement les variables globales exclusives au navigateur comme `window` ou `document`, elles lèveront des erreurs si elles sont exécutées sur Node.js, et vice-versa.
