@@ -1,6 +1,6 @@
 # Écrire du code universel
 
-Avant d'aller plus loin, prenons un moment pour discuter des contraintes lorsque l'on écrit du code « universel » - c'est à dire du code qui s'exécute à la fois côté serveur et côté client. En raison des différences d'API entre les deux plateformes, le comportement de notre code ne sera pas exactement le même selon l'environnement. Nous allons examiner les points clés dont vous devez avoir connaissance.
+Avant d'aller plus loin, prenons un moment pour discuter des contraintes lorsque l'on écrit du code « universel » ; c'est à dire du code qui s'exécute à la fois côté serveur et côté client. En raison des différences d'API entre les deux plateformes, le comportement de notre code ne sera pas exactement le même selon l'environnement. Nous allons examiner les points clés dont vous devez avoir connaissance.
 
 ## Réactivité des données côté serveur
 

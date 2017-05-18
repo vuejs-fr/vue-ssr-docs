@@ -22,7 +22,7 @@ module.exports = function createApp (context) {
 }
 ```
 
-Et notre code serveur devient:
+Et notre code serveur devient :
 
 ``` js
 // server.js
@@ -39,9 +39,9 @@ server.get('*', (req, res) => {
 })
 ```
 
-La même règle s'applique aussi bien au routeur, qu'au store et aux instances de bus d'événements. Au lieu de l'exporter directement depuis un module et de l'importer dans votre application, vous devez créer une nouvelle instance dans `createApp` et l'injecter depuis l'instance de Vue principale.
+La même règle s'applique aussi bien au routeur, qu'au store et aux instances de bus d'évènements. Au lieu de l'exporter directement depuis un module et de l'importer dans votre application, vous devez créer une nouvelle instance dans `createApp` et l'injecter depuis l'instance de Vue principale.
 
-> Cette contrainte peut être éliminée en utilisant le moteur de rendu pré-compilé ("bundle renderer") avec `{ runInNewContext: true }`, cependant il y aura un surcoût significatif en terme de performance lié à la création d'un nouveau contexte vm pour chaque requête.
+> Cette contrainte peut être éliminée en utilisant le moteur de rendu pré-compilé (« bundle renderer ») avec `{ runInNewContext: true }`, cependant il y aura un surcoût significatif en terme de performance lié à la création d'un nouveau contexte vm pour chaque requête.
 
 ## Introduction à l'étape de build
 
@@ -51,7 +51,7 @@ Jusqu'ici, nous n'avons pas encore discuté d'une méthode pour disposer de la m
 
 - Bien que la dernière version de Node.js supporte pleinement ES2015, nous avons toujours besoin de transpiler le code client pour prendre en charge les anciens navigateurs. Cela implique à nouveau une étape de build.
 
-L'idée de base est donc que nous utiliserons webpack pour empaqueter notre application à la fois pour le client et le serveur - le bundle serveur sera nécessaire au serveur et utilisé pour le rendu côté serveur, alors que le bundle client sera envoyé au navigateur pour hydrater le DOM client.
+L'idée de base est donc que nous utiliserons webpack pour empaqueter notre application à la fois pour le client et le serveur. Le bundle serveur sera nécessaire au serveur et utilisé pour le rendu côté serveur, alors que le bundle client sera envoyé au navigateur pour hydrater le DOM client.
 
 ![architecture](https://cloud.githubusercontent.com/assets/499550/17607895/786a415a-5fee-11e6-9c11-45a2cfdf085c.png)
 
@@ -61,7 +61,7 @@ Nous allons discuter des détails de la mise en place dans les prochaines sectio
 
 Maintenant que nous utilisons webpack pour développer l'application à la fois côté serveur et côté client, la majorité de notre code source peut être écrite d'une manière universelle, avec l'accès à toutes les fonctionnalités fournies par webpack. Pour autant, il y a [un certain nombre de choses](./universal.md) que vous devez garder à l'esprit en écrivant du code universel.
 
-Voici ce à quoi pourrait ressembler un projet : 
+Voici ce à quoi pourrait ressembler un projet :
 
 ``` bash
 src
@@ -83,7 +83,7 @@ src
 import Vue from 'vue'
 import App from './App.vue'
 
-// exporte une fonction de fabrique pour créer de nouvelles instances 
+// exporte une fonction de fabrique pour créer de nouvelles instances
 // de l'application, du routeur et du store
 export function createApp () {
   const app = new Vue({
