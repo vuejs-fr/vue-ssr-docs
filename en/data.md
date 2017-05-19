@@ -1,14 +1,14 @@
 # Pré-chargement et état
 
-## Data Store
+## Gestionnaire d'état des données
 
-During SSR, we are essentially rendering a "snapshot" of our app, so if the app relies on some asynchronous data, **these data need to be pre-fetched and resolved before we start the rendering process**.
+Pendant le SSR, nous allons essentiellement faire le rendu d'un « instantané » de notre application, aussi si votre applications est liée à des données asynchrones, **c'est données vont devoir être pré-chargée et résolue avant de débuter la phase de rendu**.
 
-Another concern is that on the client, the same data needs to be available before we mount the client side app - otherwise the client app would render using different state and the hydration would fail.
+Un autre point important côté client, les mêmes données doivent être disponibles avant que l'application ne soit montée, autrement, l'application côté client va faire le rendu d'un état différent et l'hydratation va échouée.
 
-To address this, the fetched data needs to live outside the view components, in a dedicated data store, or a "state container". On the server, we can pre-fetch and fill data into the store before rendering. In addition, we will serialize and inline the state in the HTML. The client-side store can directly pick up the inlined state before we mount the app.
+Pour résoudre cela, les données pré-chargées doivent vivre en dehors de la vue du composant, dans un gestionnaire de données, ou dans un « gestionnaire d'état ». Côté serveur, nous pouvons pré-chargé et remplir les données dans le gestionnaire de donnée avant le rendu. De plus, nous allons en sérialiser et en injecter l'état dans le HTML. Le gestionnaire de données côté client poura directement récupérer l'état depuis le HTML avant que l'application ne soit montée.
 
-We will be using the official state management library [Vuex](https://github.com/vuejs/vuex/) for this purpose. Let's create a `store.js` file, with some mocked logic for fetching an item based on an id:
+Nous allons utiliser le gestionnaire d'état officiel (« store ») de la bibliothèque [Vuex](https://github.com/vuejs/vuex/) pour cette partie. Créons un fichier `store.js`, avec divers jeu de logique pour pré-chargé un élément en nous basant sur un identifiant :
 
 ``` js
 // store.js
@@ -17,8 +17,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-// Assume we have a universal API that returns Promises
-// and ignore the implementation details
+// Supposons que nous ayons une API universelle retournant
+// des Promesses (« Promise ») et ignorons les détails de l'implémentation
 import { fetchItem } from './api'
 
 export function createStore () {
@@ -28,8 +28,8 @@ export function createStore () {
     },
     actions: {
       fetchItem ({ commit }, id) {
-        // return the Promise via store.dispatch() so that we know
-        // when the data has been fetched
+        // retournant la Promesse via `store.dispatch()` nous savons
+        // quand les données ont été pré-chargées
         return fetchItem(id).then(item => {
           commit('setItem', { id, item })
         })
@@ -44,7 +44,7 @@ export function createStore () {
 }
 ```
 
-And update `app.js`:
+et mettons à jour `app.js`:
 
 ``` js
 // app.js
@@ -55,32 +55,32 @@ import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 
 export function createApp () {
-  // create router and store instances
+  // créer le routeur et l'instance du store
   const router = createRouter()
   const store = createStore()
 
-  // sync so that route state is available as part of the store
+  // synchroniser pour que l'état de la route soit disponible en tant que donnée du store
   sync(store, router)
 
-  // create the app instance, injecting both the router and the store
+  // créer l'instance de l'app, injecter le routeur et le store
   const app = new Vue({
     router,
     store,
     render: h => h(App)
   })
 
-  // expose the app, the router and the store.
+  // exposer l'application, le routeur et le store.
   return { app, router, store }
 }
 ```
 
-## Logic Collocation with Components
+## Collocation logique avec les composants
 
-So, where do we place the code that dispatches the data-fetching actions?
+Donc, ou devons nous appeler le code en charge de l'action de pré-chargement ?
 
-The data we need to fetch is determined by the route visited - which also determines what components are rendered. In fact, the data needed for a given route is also the data needed by the components rendered at that route. So it would be natural to place the data fetching logic inside route components.
+Les données que nous avons besoin de pré-chargée sont déterminée par la route visitée, qui va aussi déterminé quel composant va être rendu. En fait, les données nécéssaire a une route donnée sont aussi les données nécéssaire au composant pour être rendu pour une route. Aussi il serait naturel de placer la logique de pré-chargement à l'intérieur des composants de route.
 
-We will expose a custom static function `asyncData` on our route components. Note because this function will be called before the components are instantiated, it doesn't have access to `this`. The store and route information needs to be passed in as arguments:
+Nous allons exposer une fonction statique personnalisée `asyncData` sur nos composants de route. Notez que, puisque cette fonction va être appelée avant l'instanciation des composants, l'accès à `this` n'est pas possible. Le store et les informations de route ont donc besoin d'être passés en tant qu'arguments :
 
 ``` html
 <!-- Item.vue -->
@@ -91,12 +91,12 @@ We will expose a custom static function `asyncData` on our route components. Not
 <script>
 export default {
   asyncData ({ store, route }) {
-    // return the Promise from the action
+    // retourne la Promesse depuis l'action
     return store.dispatch('fetchItem', route.params.id)
   },
 
   computed: {
-    // display the item from store state.
+    // affiche l'élément depuis l'état du store.
     item () {
       return this.$store.state.items[this.$route.params.id]
     }
@@ -105,9 +105,9 @@ export default {
 </script>
 ```
 
-## Server Data Fetching
+## Pré-chargement de données côté serveur
 
-In `entry-server.js` we can get the components matched by a route with `router.getMatchedComponents()`, and call `asyncData` if the component exposes it. Then we need to attach resolved state to the render context.
+Dans `entry-server.js` nous pouvons obtenir des composants qu'ils concordent avec une route grâce à `router.getMatchedComponents()`, et appeler `asyncData` si le composant l'expose. Nous avons ensuite besoin d'attacher l'état résolue au contexte de rendu.
 
 ``` js
 // entry-server.js
@@ -125,7 +125,7 @@ export default context => {
         reject({ code: 404 })
       }
 
-      // call asyncData() on all matched route components
+      // appeler `asyncData()` sur toutes les routes concordant
       Promise.all(matchedComponents.map(Component => {
         if (Component.asyncData) {
           return Component.asyncData({
@@ -134,11 +134,11 @@ export default context => {
           })
         }
       })).then(() => {
-        // After all preFetch hooks are resolved, our store is now
-        // filled with the state needed to render the app.
-        // When we attach the state to the context, and the `template` option
-        // is used for the renderer, the state will automatically be
-        // serialized and injected into the HTML as window.__INITIAL_STATE__.
+        // Après que chaque hook de pré-chargement soit résolue, notre store est maintenant
+        // rempli avec l'état nécéssaire au rendu de l'application.
+        // Quand nous attachons l'état au contexte, et que l'option `template`
+        // est utilisée pour faire le rendu, l'état va automatiquement être
+        // sérialisé et injetté dans le HTML pour alimenter window.__INITIAL_STATE__.
         context.state = store.state
 
         resolve(app)
@@ -148,7 +148,7 @@ export default context => {
 }
 ```
 
-When using `template`, `context.state` will automatically be embedded in the final HTML as `window.__INITIAL_STATE__` state. On the client, the store should pick up the state before mounting the application:
+En utilisant `template`, `context.state` va automatiquement être encapsulé dans le HTML final en tant que qu'état `window.__INITIAL_STATE__`. Côté client, le store voudra récupérer cet état avant de monter l'application :
 
 ``` js
 // entry-client.js
@@ -160,7 +160,7 @@ if (window.__INITIAL_STATE__) {
 }
 ```
 
-## Client Data Fetching
+## Pré-chargement de données côté client
 
 On the client, there are two different approaches for handling data fetching:
 
