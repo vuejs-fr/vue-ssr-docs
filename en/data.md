@@ -2,13 +2,13 @@
 
 ## Gestionnaire d'état des données
 
-Pendant le SSR, nous allons essentiellement faire le rendu d'un « instantané » de notre application, aussi si votre applications est liée à des données asynchrones, **c'est données vont devoir être pré-chargée et résolue avant de débuter la phase de rendu**.
+Pendant le SSR, nous allons essentiellement faire le rendu d'un « instantané » de notre application, aussi si votre application est liée à des données asynchrones, **ces données vont devoir être pré-chargées et résolues avant de débuter la phase de rendu**.
 
-Un autre point important côté client, les mêmes données doivent être disponibles avant que l'application ne soit montée, autrement, l'application côté client va faire le rendu d'un état différent et l'hydratation va échouée.
+Un autre point important côté client, les mêmes données doivent être disponibles avant que l'application ne soit montée, autrement, l'application côté client va faire le rendu d'un état différent et l'hydratation va échouer.
 
-Pour résoudre cela, les données pré-chargées doivent vivre en dehors de la vue du composant, dans un gestionnaire de données, ou dans un « gestionnaire d'état ». Côté serveur, nous pouvons pré-chargé et remplir les données dans le gestionnaire de donnée avant le rendu. De plus, nous allons en sérialiser et en injecter l'état dans le HTML. Le gestionnaire de données côté client poura directement récupérer l'état depuis le HTML avant que l'application ne soit montée.
+Pour résoudre cela, les données pré-chargées doivent vivre en dehors de la vue du composant, dans un gestionnaire de données, ou dans un « gestionnaire d'état ». Côté serveur, nous pouvons pré-charger et remplir les données dans le gestionnaire de donnée avant le rendu. De plus, nous allons en sérialiser et en injecter l'état dans le HTML. Le gestionnaire de données côté client pourra directement récupérer l'état depuis le HTML avant que l'application ne soit montée.
 
-Nous allons utiliser le gestionnaire d'état officiel (« store ») de la bibliothèque [Vuex](https://github.com/vuejs/vuex/) pour cette partie. Créons un fichier `store.js`, avec divers jeu de logique pour pré-chargé un élément en nous basant sur un identifiant :
+Nous allons utiliser le gestionnaire d'état officiel (« store ») de la bibliothèque [Vuex](https://github.com/vuejs/vuex/) pour cette partie. Créons un fichier `store.js`, avec divers jeu de logique pour pré-charger un élément en nous basant sur un identifiant :
 
 ``` js
 // store.js
@@ -62,7 +62,7 @@ export function createApp () {
   // synchroniser pour que l'état de la route soit disponible en tant que donnée du store
   sync(store, router)
 
-  // créer l'instance de l'app, injecter le routeur et le store
+  // créer l'instance de l'application, injecter le routeur et le store
   const app = new Vue({
     router,
     store,
@@ -78,9 +78,9 @@ export function createApp () {
 
 Donc, ou devons nous appeler le code en charge de l'action de pré-chargement ?
 
-Les données que nous avons besoin de pré-chargée sont déterminée par la route visitée, qui va aussi déterminé quel composant va être rendu. En fait, les données nécéssaire a une route donnée sont aussi les données nécéssaire au composant pour être rendu pour une route. Aussi il serait naturel de placer la logique de pré-chargement à l'intérieur des composants de route.
+Les données que nous avons besoin de pré-charger sont déterminées par la route visitée, qui va aussi déterminée quel composant va être rendu. En fait, les données nécessaire a une route donnée sont aussi les données nécessaire au composant pour être rendu pour une route. Aussi il serait naturel de placer la logique de pré-chargement à l'intérieur des composants de route.
 
-Nous allons exposer une fonction statique personnalisée `asyncData` sur nos composants de route. Notez que, puisque cette fonction va être appelée avant l'instanciation des composants, l'accès à `this` n'est pas possible. Le store et les informations de route ont donc besoin d'être passés en tant qu'arguments :
+Nous allons exposer une fonction statique personnalisée `asyncData` sur nos composants de route. Notez que, puisque cette fonction va être appelée avant l'instanciation des composants, l'accès à `this` ne sera pas possible. Le store et les informations de route ont donc besoin d'être passés en tant qu'arguments :
 
 ``` html
 <!-- Item.vue -->
@@ -135,10 +135,10 @@ export default context => {
         }
       })).then(() => {
         // Après que chaque hook de pré-chargement soit résolue, notre store est maintenant
-        // rempli avec l'état nécéssaire au rendu de l'application.
+        // rempli avec l'état nécessaire au rendu de l'application.
         // Quand nous attachons l'état au contexte, et que l'option `template`
         // est utilisée pour faire le rendu, l'état va automatiquement être
-        // sérialisé et injetté dans le HTML pour alimenter window.__INITIAL_STATE__.
+        // sérialisé et injecté dans le HTML pour alimenter window.__INITIAL_STATE__.
         context.state = store.state
 
         resolve(app)
@@ -148,7 +148,7 @@ export default context => {
 }
 ```
 
-En utilisant `template`, `context.state` va automatiquement être encapsulé dans le HTML final en tant que qu'état `window.__INITIAL_STATE__`. Côté client, le store voudra récupérer cet état avant de monter l'application :
+En utilisant `template`, `context.state` va automatiquement être encapsulé dans le HTML final en tant qu'état `window.__INITIAL_STATE__`. Côté client, le store voudra récupérer cet état avant de monter l'application :
 
 ``` js
 // entry-client.js
@@ -162,30 +162,30 @@ if (window.__INITIAL_STATE__) {
 
 ## Pré-chargement de données côté client
 
-On the client, there are two different approaches for handling data fetching:
+Côté client, il y a deux différentes approches pour gérer du pré-chargement de données :
 
-1. **Resolve data before route navigation:**
+1. **Résoudre les données avant de changer de route :**
 
-  With this strategy, the app will stay on the current view until the data needed by the incoming view has been resolved. The benefit is that the incoming view can directly render the full content when it's ready, but if the data fetching takes a long time, the user will feel "stuck" on the current view. It is therefore recommended to provide a data loading indicator if using this strategy.
+  Avec cette stratégie, l'application va rester sur la vue courante jusqu'à ce que les données nécessaire à la vue suivante soient résolue. L'avantage est que la vue suivante pourra faire le rendu complet du contenu aussitôt qu'il sera prêt, mais si les données mettent trop de temps à charger, l'utilisateur va se sentir « bloquer » sur la vue courante. C'est pourquoi il est recommandé de fournir un indicateur de chargement si vous utilisez cette stratégie.
 
-  We can implement this strategy on the client by checking matched components and invoking their `asyncData` function inside a global route hook. Note we should register this hook after the initial route is ready so that we don't unnecessarily fetch the server-fetched data again.
+  Nous pouvons implémenter cette stratégie côté client en vérifiant la concordance des composants et en exécutant leurs fonctions `asyncData` à l'intérieur du hook global du routeur. Notez que nous devrions enregistrer cette route après que la route initiale ne soit prête et donc il n'est pas nécessaire de pré-charger de nouveau les données du serveur ayant déjà été pré-chargées.
 
   ``` js
   // entry-client.js
 
-  // ...omitting unrelated code
+  // ...omission du code sans rapport
 
   router.onReady(() => {
-    // Add router hook for handling asyncData.
-    // Doing it after initial route is resolved so that we don't double-fetch
-    // the data that we already have. Using router.beforeResolve() so that all
-    // async components are resolved.
+    // Ajouter le hook du routeur pour gérer `asyncData`
+    // Cela étant fait après la résolution de la route initial, évitons un double pré-chargement
+    // des données que nous avons déjà. Utilisation de `router.beforeResolve()`, ainsi tous
+    // les composants asynchrones sont résolues.
     router.beforeResolve((to, from, next) => {
       const matched = router.getMatchedComponents(to)
       const prevMatched = router.getMatchedComponents(from)
 
-      // we only care about none-previously-rendered components,
-      // so we compare them until the two matched lists differ
+      // nous allons uniquement nous occuper des composants qui n'ont pas déjà été rendu
+      // aussi nous allons les comparer jusqu'à ce que deux éléments concordant diffères
       let diffed = false
       const activated = matched.filter((c, i) => {
         return diffed || (diffed = (prevMatched[i] !== c))
@@ -195,7 +195,7 @@ On the client, there are two different approaches for handling data fetching:
         return next()
       }
 
-      // this is where we should trigger a loading indicator if there is one
+      // c'est ici qu'il faudrait lancer un indicateur de chargement si nous en avions un
 
       Promise.all(activated.map(c => {
         if (c.asyncData) {
@@ -203,7 +203,7 @@ On the client, there are two different approaches for handling data fetching:
         }
       })).then(() => {
 
-        // stop loading indicator
+        // arrêt de l'indicateur de chargement
 
         next()
       }).catch(next)
@@ -213,20 +213,20 @@ On the client, there are two different approaches for handling data fetching:
   })
   ```
 
-2. **Fetch data after the matched view is rendered:**
+2. **Pré-charger les données après que les vues concordantes soient rendues :**
 
-  This strategy places the client-side data-fetching logic in a view component's `beforeMount` function. This allows the views to switch instantly when a route navigation is triggered, so the app feels a bit more responsive. However, the incoming view will not have the full data available when it's rendered. It is therefore necessary to have a conditional loading state for each view component that uses this strategy.
+  Cette stratégie place la logique de pré-chargement côté client dans la fonction `beforeMount` de la vue du composant. Cela permet aux vues de changer instantanément quand un changement de route est enclenché, aussi l'application semblera un peu plus réactive. Cependant, la vue suivante n'aura pas l'intégralité de ses données disponibles lors du rendu. Il est donc nécessaire d'avoir un état de chargement conditionnel pour chaque vue de composant utilisant cette stratégie.
 
-  This can be achieved with a client-only global mixin:
+  Cela peut être réalisé avec un mixin global uniquement côté client :
 
   ``` js
   Vue.mixin({
     beforeMount () {
       const { asyncData } = this.$options
       if (asyncData) {
-        // assign the fetch operation to a promise
-        // so that in components we can do `this.dataPromise.then(...)` to
-        // perform other tasks after data is ready
+        // assigner une opération de pré-chargement à une Promesse
+        // ainsi tout ce que nous devons faire dans un composant est `this.dataPromise.then(...)`
+        // pour exécuter la suite des tâches une fois que les données sont prêtes
         this.dataPromise = asyncData({
           store: this.$store,
           route: this.$route
@@ -236,7 +236,7 @@ On the client, there are two different approaches for handling data fetching:
   })
   ```
 
-The two strategies are ultimately different UX decisions and should be picked based on the actual scenario of the app you are building. But regardless of which strategy you pick, the `asyncData` function should also be called when a route component is reused (same route, but params or query changed. e.g. from `user/1` to `user/2`). We can also handle this with a client-only global mixin:
+Les deux stratégies conduisent à une expérience utilisateur singulièrement différente et doivent être choisis en fonction du scénario de l'application que vous construisez. Mais indépendamment de votre choix de stratégie, la fonction `asyncData` devrait également être appelée quand la route d'un composant est de nouveau utilisée (même route, mais avec des paramètres ou une demande « query » différente comme par ex. avec `utilisateur/1` et `utilisateur/2`). Nous pouvons également réaliser ceci avec un mixin global uniquement côté client.
 
 ``` js
 Vue.mixin({
@@ -254,16 +254,16 @@ Vue.mixin({
 })
 ```
 
-## Store Code Splitting
+## Scission de code du Store
 
-In a large application, our vuex store will likely be split into multiple modules. Of course, it is also possible to code-split these modules into corresponding route component chunks. Suppose we have the following store module:
+Dans une grosse application, notre store vuex va très probablement être scinder dans de multiples modules. Bien sur, il est aussi possible de scinder le code de ces modules en fragments correspondant aux routes. Supposons que nous ayons le module store suivant :
 
 ``` js
 // store/modules/foo.js
 export default {
   namespaced: true,
-  // IMPORTANT: state must be a function so the module can be
-  // instantiated multiple times
+  // IMPORTANT: l'état doit être une fonction sinon le module ne
+  // pourra pas être instancié de multiples fois
   state: () => ({
     count: 0
   }),
@@ -276,7 +276,7 @@ export default {
 }
 ```
 
-We can use `store.registerModule` to lazy-register this module in a route component's `asyncData` hook:
+Nous pouvons utiliser `store.registerModule` pour enregistrer ce module à la volée dans le hook `asyncData` du composant :
 
 ``` html
 // inside a route component
@@ -285,7 +285,7 @@ We can use `store.registerModule` to lazy-register this module in a route compon
 </template>
 
 <script>
-// import the module here instead of in `store/index.js`
+// importer le module d'ici et non de `store/index.js`
 import fooStoreModule from '../store/modules/foo'
 
 export default {
@@ -294,8 +294,8 @@ export default {
     return store.dispatch('foo/inc')
   },
 
-  // IMPORTANT: avoid duplicate module registration on the client
-  // when the route is visited multiple times.
+  // IMPORTANT: il faut éviter le double enregistrement de module côté client
+  // quand la route est visitée plusieurs fois.
   destroyed () {
     this.$store.unregisterModule('foo')
   },
@@ -309,8 +309,8 @@ export default {
 </script>
 ```
 
-Because the module is now a dependency of the route component, it will be moved into the route component's async chunk by webpack.
+Parce que le module est maintenant une dépendance du composant de route, il peut a présent être déplacer dans un fragment de composant de route par webpack.
 
 ---
 
-Phew, that was a lot of code! This is because universal data-fetching is probably the most complex problem in a server-rendered app and we are laying the groundwork for easier further development. Once the boilerplate is set up, authoring individual components will be actually quite pleasant.
+Fiou, Cela fait pas mal de code ! Cela est dû au fait que le pré-chargement universel est probablement le problème le plus complexe d'une application avec rendu côté serveur et nous avons poser les bases pour un développement futur plus simple. Maintenant que cette base est mise en place, modifier des composants individuellement sera en fait plutôt agréable.
