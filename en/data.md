@@ -1,4 +1,4 @@
-# Pré-chargement et état
+# Récupération de données et état
 
 ## Gestionnaire d'état des données
 
@@ -76,9 +76,9 @@ export function createApp () {
 
 ## Collocation logique avec les composants
 
-Donc, où devons nous appeler le code en charge de l'action de pré-chargement ?
+Donc, où devons nous appeler le code en charge de l'action de récupération de données ?
 
-Les données que nous avons besoin de pré-charger sont déterminées par la route visitée, qui va aussi déterminer quels composants vont être rendus. En fait, les données nécessaires a une route donnée sont aussi les données nécessaires aux composants pour être rendus pour une route. Aussi il serait naturel de placer la logique de pré-chargement à l'intérieur des composants de route.
+Les données que nous avons besoin de pré-charger sont déterminées par la route visitée, qui va aussi déterminer quels composants vont être rendus. En fait, les données nécessaires a une route donnée sont aussi les données nécessaires aux composants pour être rendus pour une route. Aussi il serait naturel de placer la logique de récupération de données à l'intérieur des composants de route.
 
 Nous allons exposer une fonction statique personnalisée `asyncData` sur nos composants de route. Notez que, puisque cette fonction va être appelée avant l'instanciation des composants, l'accès à `this` ne sera pas possible. Le store et les informations de route ont donc besoin d'être passés en tant qu'arguments :
 
@@ -105,7 +105,7 @@ export default {
 </script>
 ```
 
-## Pré-chargement de données côté serveur
+## Récupération de données côté serveur
 
 Dans `entry-server.js` nous pouvons obtenir les composants qui concordent avec une route grâce à `router.getMatchedComponents()`, et appeler `asyncData` si le composant l'expose. Nous avons ensuite besoin d'attacher l'état résolu au contexte de rendu.
 
@@ -160,9 +160,9 @@ if (window.__INITIAL_STATE__) {
 }
 ```
 
-## Pré-chargement de données côté client
+## Récupération de données côté client
 
-Côté client, il y a deux différentes approches pour gérer du pré-chargement de données :
+Côté client, il y a deux différentes approches pour gérer du récapération de données :
 
 1. **Résoudre les données avant de changer de route :**
 
@@ -177,7 +177,7 @@ Côté client, il y a deux différentes approches pour gérer du pré-chargement
 
   router.onReady(() => {
     // Ajouter le hook du routeur pour gérer `asyncData`
-    // Cela étant fait après la résolution de la route initial, évitons un double pré-chargement
+    // Cela étant fait après la résolution de la route initial, évitons une double récupération de données
     // des données que nous avons déjà. Utilisation de `router.beforeResolve()`, ainsi tous
     // les composants asynchrones sont résolues.
     router.beforeResolve((to, from, next) => {
@@ -213,9 +213,9 @@ Côté client, il y a deux différentes approches pour gérer du pré-chargement
   })
   ```
 
-2. **Pré-charger les données après que les vues concordantes soient rendues :**
+2. **Récupérer les données après que les vues concordantes soient rendues :**
 
-  Cette stratégie place la logique de pré-chargement côté client dans la fonction `beforeMount` de la vue du composant. Cela permet aux vues de changer instantanément quand un changement de route est enclenché, aussi l'application semblera un peu plus réactive. Cependant, la vue suivante n'aura pas l'intégralité de ses données disponibles lors du rendu. Il est donc nécessaire d'avoir un état de chargement conditionnel pour chaque vue de composant utilisant cette stratégie.
+  Cette stratégie place la logique de récupération de données côté client dans la fonction `beforeMount` de la vue du composant. Cela permet aux vues de changer instantanément quand un changement de route est enclenché, aussi l'application semblera un peu plus réactive. Cependant, la vue suivante n'aura pas l'intégralité de ses données disponibles lors du rendu. Il est donc nécessaire d'avoir un état de chargement conditionnel pour chaque vue de composant utilisant cette stratégie.
 
   Cela peut être réalisé avec un mixin global uniquement côté client :
 
@@ -224,7 +224,7 @@ Côté client, il y a deux différentes approches pour gérer du pré-chargement
     beforeMount () {
       const { asyncData } = this.$options
       if (asyncData) {
-        // assigner une opération de pré-chargement à une Promesse
+        // assigner une opération de récupération de données à une Promesse
         // ainsi tout ce que nous devons faire dans un composant est `this.dataPromise.then(...)`
         // pour exécuter la suite des tâches une fois que les données sont prêtes
         this.dataPromise = asyncData({
