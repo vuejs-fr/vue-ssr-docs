@@ -44,7 +44,7 @@ export function createStore () {
 }
 ```
 
-et mettons à jour `app.js`:
+Et mettons à jour `app.js`:
 
 ``` js
 // app.js
