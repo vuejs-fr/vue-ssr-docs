@@ -4,11 +4,11 @@
 
 Pendant le SSR, nous allons essentiellement faire le rendu d'un « instantané » de notre application, aussi si votre application est liée à des données asynchrones, **ces données vont devoir être pré-chargées et résolues avant de débuter la phase de rendu**.
 
-Un autre point important côté client, les mêmes données doivent être disponibles avant que l'application ne soit montée, autrement, l'application côté client va faire le rendu d'un état différent et l'hydratation va échouer.
+Un autre point important côté client ; les mêmes données doivent être disponibles avant que l'application ne soit montée, autrement, l'application côté client va faire le rendu d'un état différent et l'hydratation va échouer.
 
-Pour résoudre cela, les données pré-chargées doivent vivre en dehors de la vue du composant, dans un gestionnaire de données, ou dans un « gestionnaire d'état ». Côté serveur, nous pouvons pré-charger et remplir les données dans le gestionnaire de donnée avant le rendu. De plus, nous allons en sérialiser et en injecter l'état dans le HTML. Le gestionnaire de données côté client pourra directement récupérer l'état depuis le HTML avant que l'application ne soit montée.
+Pour résoudre cela, les données pré-chargées doivent vivre en dehors de la vue du composant, dans un gestionnaire de données, ou dans un « gestionnaire d'état ». Côté serveur, nous pouvons pré-charger et remplir les données dans le gestionnaire de données avant le rendu. De plus, nous allons sérialiser et injecter l'état dans le HTML. Le gestionnaire de données côté client pourra directement récupérer l'état depuis le HTML avant que l'application ne soit montée.
 
-Nous allons utiliser le gestionnaire d'état officiel (« store ») de la bibliothèque [Vuex](https://github.com/vuejs/vuex/) pour cette partie. Créons un fichier `store.js`, avec divers jeu de logique pour pré-charger un élément en nous basant sur un identifiant :
+Nous allons utiliser le gestionnaire d'état officiel (« store ») de la bibliothèque [Vuex](https://github.com/vuejs/vuex/) pour cette partie. Créons un fichier `store.js`, avec divers jeux de logique pour pré-charger un élément en nous basant sur un identifiant :
 
 ``` js
 // store.js
@@ -28,7 +28,7 @@ export function createStore () {
     },
     actions: {
       fetchItem ({ commit }, id) {
-        // retournant la Promesse via `store.dispatch()` nous savons
+        // retournant la Promesse via `store.dispatch()`, nous savons
         // quand les données ont été pré-chargées
         return fetchItem(id).then(item => {
           commit('setItem', { id, item })
@@ -76,9 +76,9 @@ export function createApp () {
 
 ## Collocation logique avec les composants
 
-Donc, ou devons nous appeler le code en charge de l'action de pré-chargement ?
+Donc, où devons nous appeler le code en charge de l'action de pré-chargement ?
 
-Les données que nous avons besoin de pré-charger sont déterminées par la route visitée, qui va aussi déterminée quel composant va être rendu. En fait, les données nécessaire a une route donnée sont aussi les données nécessaire au composant pour être rendu pour une route. Aussi il serait naturel de placer la logique de pré-chargement à l'intérieur des composants de route.
+Les données que nous avons besoin de pré-charger sont déterminées par la route visitée, qui va aussi déterminer quels composants vont être rendus. En fait, les données nécessaires a une route donnée sont aussi les données nécessaires aux composants pour être rendus pour une route. Aussi il serait naturel de placer la logique de pré-chargement à l'intérieur des composants de route.
 
 Nous allons exposer une fonction statique personnalisée `asyncData` sur nos composants de route. Notez que, puisque cette fonction va être appelée avant l'instanciation des composants, l'accès à `this` ne sera pas possible. Le store et les informations de route ont donc besoin d'être passés en tant qu'arguments :
 
@@ -91,12 +91,12 @@ Nous allons exposer une fonction statique personnalisée `asyncData` sur nos com
 <script>
 export default {
   asyncData ({ store, route }) {
-    // retourne la Promesse depuis l'action
+    // retourner la Promesse depuis l'action
     return store.dispatch('fetchItem', route.params.id)
   },
 
   computed: {
-    // affiche l'élément depuis l'état du store.
+    // afficher l'élément depuis l'état du store.
     item () {
       return this.$store.state.items[this.$route.params.id]
     }
@@ -107,7 +107,7 @@ export default {
 
 ## Pré-chargement de données côté serveur
 
-Dans `entry-server.js` nous pouvons obtenir des composants qu'ils concordent avec une route grâce à `router.getMatchedComponents()`, et appeler `asyncData` si le composant l'expose. Nous avons ensuite besoin d'attacher l'état résolue au contexte de rendu.
+Dans `entry-server.js` nous pouvons obtenir les composants qui concordent avec une route grâce à `router.getMatchedComponents()`, et appeler `asyncData` si le composant l'expose. Nous avons ensuite besoin d'attacher l'état résolu au contexte de rendu.
 
 ``` js
 // entry-server.js
@@ -125,7 +125,7 @@ export default context => {
         return reject({ code: 404 })
       }
 
-      // appeler `asyncData()` sur toutes les routes concordant
+      // appeler `asyncData()` sur toutes les routes concordantes
       Promise.all(matchedComponents.map(Component => {
         if (Component.asyncData) {
           return Component.asyncData({
@@ -134,11 +134,11 @@ export default context => {
           })
         }
       })).then(() => {
-        // Après que chaque hook de pré-chargement soit résolue, notre store est maintenant
+        // Après que chaque hook de pré-chargement soit résolu, notre store est maintenant
         // rempli avec l'état nécessaire au rendu de l'application.
         // Quand nous attachons l'état au contexte, et que l'option `template`
         // est utilisée pour faire le rendu, l'état va automatiquement être
-        // sérialisé et injecté dans le HTML pour alimenter window.__INITIAL_STATE__.
+        // être sérialisé et injecté dans le HTML en tant que `window.__INITIAL_STATE__`.
         context.state = store.state
 
         resolve(app)
@@ -166,9 +166,9 @@ Côté client, il y a deux différentes approches pour gérer du pré-chargement
 
 1. **Résoudre les données avant de changer de route :**
 
-  Avec cette stratégie, l'application va rester sur la vue courante jusqu'à ce que les données nécessaire à la vue suivante soient résolue. L'avantage est que la vue suivante pourra faire le rendu complet du contenu aussitôt qu'il sera prêt, mais si les données mettent trop de temps à charger, l'utilisateur va se sentir « bloquer » sur la vue courante. C'est pourquoi il est recommandé de fournir un indicateur de chargement si vous utilisez cette stratégie.
+  Avec cette stratégie, l'application va rester sur la vue courante jusqu'à ce que les données nécessaires à la vue suivante soient résolues. L'avantage est que la vue suivante pourra faire le rendu complet du contenu aussitôt qu'il sera prêt, mais si les données mettent trop de temps à charger, l'utilisateur va se sentir « bloquer » sur la vue courante. C'est pourquoi il est recommandé de fournir un indicateur de chargement si vous utilisez cette stratégie.
 
-  Nous pouvons implémenter cette stratégie côté client en vérifiant la concordance des composants et en exécutant leurs fonctions `asyncData` à l'intérieur du hook global du routeur. Notez que nous devrions enregistrer cette route après que la route initiale ne soit prête et donc il n'est pas nécessaire de pré-charger de nouveau les données du serveur ayant déjà été pré-chargées.
+  Nous pouvons implémenter cette stratégie côté client en vérifiant la concordance des composants et en exécutant leurs fonctions `asyncData` à l'intérieur du hook global du routeur. Notez que nous devrions enregistrer ce hook après que la route initiale ne soit prête et donc il n'est pas nécessaire de pré-charger de nouveau les données du serveur ayant déjà été pré-chargées.
 
   ``` js
   // entry-client.js
@@ -256,7 +256,7 @@ Vue.mixin({
 
 ## Scission de code du Store
 
-Dans une grosse application, notre store vuex va très probablement être scinder dans de multiples modules. Bien sur, il est aussi possible de scinder le code de ces modules en fragments correspondant aux routes. Supposons que nous ayons le module store suivant :
+Dans une grosse application, notre store Vuex va très probablement être scinder dans de multiples modules. Bien sur, il est aussi possible de scinder le code de ces modules en fragments correspondant aux routes. Supposons que nous ayons le module store suivant :
 
 ``` js
 // store/modules/foo.js
@@ -313,4 +313,4 @@ Parce que le module est maintenant une dépendance du composant de route, il peu
 
 ---
 
-Fiou, Cela fait pas mal de code ! Cela est dû au fait que le pré-chargement universel est probablement le problème le plus complexe d'une application avec rendu côté serveur et nous avons poser les bases pour un développement futur plus simple. Maintenant que cette base est mise en place, modifier des composants individuellement sera en fait plutôt agréable.
+Fiou, cela fait pas mal de code ! Cela est dû au fait que le pré-chargement universel est probablement le problème le plus complexe d'une application avec rendu côté serveur et nous avons poser les bases pour un développement futur plus simple. Maintenant que cette base est mise en place, modifier des composants individuellement sera en fait plutôt agréable.
