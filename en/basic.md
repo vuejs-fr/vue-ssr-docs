@@ -110,7 +110,10 @@ Le modèle de page supporte également une interpolation simple. Avec le modèle
 ``` html
 <html>
   <head>
+    <!-- use double mustache for HTML-escaped interpolation -->
     <title>{{ title }}</title>
+    
+    <!-- use triple mustache for non-HTML-escaped interpolation -->
     {{{ meta }}}
   </head>
   <body>
