@@ -7,7 +7,7 @@ Dans `entry-client.js`, nous montons simplement l'application avec cette ligne :
 app.$mount('#app')
 ```
 
-Parceque le serveur a déjà fait le rendu des balises, nous ne voulons évidemment pas tout jeter et recréer l'intégralité des éléments du DOM. À la place, nous voulons « hydrater » les balises statiques et les rendres intéractives.
+Parceque le serveur a déjà fait le rendu des balises, nous ne voulons évidemment pas tout jeter et recréer l'intégralité des éléments du DOM. À la place, nous voulons « hydrater » les balises statiques et les rendre intéractives.
 
 Si vous inspectez le rendu en sortie côté serveur, vous remarquerez que l'élément racine a un attribut spécial :
 
@@ -17,7 +17,7 @@ Si vous inspectez le rendu en sortie côté serveur, vous remarquerez que l'él�
 
 L'attribut spécial `data-server-rendered` permet à Vue, depuis le côté client, de savoir quelle balise a été rendue par le serveur et d'être capable de monter l'application en mode hydratation.
 
-En mode développement, Vue va vérifier que le DOM virtuel généré côté client concorde avec la structure du DOM rendu par le serveur. S'il y a non concordance, il va bypasser l'hydratation, retirer le DOM existant et refaire le rendu depuis le début. **En mode production, ces vérifications sont désactivés pour des performances maximales.**
+En mode développement, Vue va vérifier que le DOM virtuel généré côté client concorde avec la structure du DOM rendu par le serveur. S'il y a non concordance, il va bypasser l'hydratation, retirer le DOM existant et refaire le rendu depuis le début. **En mode production, ces vérifications sont désactivées pour des performances maximales.**
 
 ### Limitation de l'hydration
 
@@ -25,7 +25,7 @@ Une chose qu'il faut savoir est qu'en utilisant un SSR + une hydratation côté 
 
 ``` html
 <table>
-  <tr><td>hi</td></tr>
+  <tr><td>salut</td></tr>
 </table>
 ```
 
