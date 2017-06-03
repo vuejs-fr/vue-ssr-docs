@@ -1,6 +1,6 @@
 # Configuration de pré-compilation
 
-Nous allons suposez que vous savez déjà comment configurer webpack pour un projet uniquement client. La configuration pour un projet avec du SSR va être en grande partie similaire, mais nous vous sugérons de séparer vos configurations en trois fichiers : *base*, *client* et *server*. La configuration de base contient la configuration partagée par les deux environnements, comme les chemins de sortie, les aliases et les loaders. La configuration du serveur et la configuration du client peut simplement étendre la configuration de base en utilisant [webpack-merge](https://github.com/survivejs/webpack-merge).
+Nous allons suposez que vous savez déjà comment configurer webpack pour un projet uniquement client. La configuration pour un projet avec du SSR va être en grande partie similaire, mais nous vous suggérons de séparer vos configurations en trois fichiers : *base*, *client* et *server*. La configuration de base contient la configuration partagée par les deux environnements, comme les chemins de sortie, les aliases et les loaders. La configuration du serveur et la configuration du client peut simplement étendre la configuration de base en utilisant [webpack-merge](https://github.com/survivejs/webpack-merge).
 
 ## Configuration serveur
 
@@ -31,11 +31,11 @@ module.exports = merge(baseConfig, {
 
   // https://webpack.js.org/configuration/externals/#function
   // https://github.com/liady/webpack-node-externals
-  // Dépendances aux applications externes. Cela rend le build serveur plus rapide
+  // Externalise les dépendances de l'application. Cela rend le build serveur plus rapide
   // et génère un fichier de paquetage plus petit.
   externals: nodeExternals({
     // ne pas externaliser les dépendances qui ont besoin d'être traitées par webpack.
-    // vous pouvez ajouter plus de types de fichier comme par ex. ici, avec les fichiers `*.vue`
+    // vous pouvez ajouter plus de types de fichier ici, comme par ex. avec les fichiers `*.vue`
     // vous devriez aussi lister des exceptions qui modifient `global` (par ex. les polyfills)
     whitelist: /\.css$/
   }),
@@ -62,7 +62,7 @@ Vous pouvez alternativement tout aussi bien passer le paquetage comme un objet �
 
 ### Limitations externes
 
-Notons que dans l'options `externals` nous avons exclus les fichiers CSS. Cela parce que les fichiers CSS importés par dépendances doivent quand même être gérés par webpack. Si vous importez n'importe quels autres types de fichier également pris en charge par webpack (ex : `*.vue`, `*.styl`), vous pouvez également les ajouter à la liste des exceptions.
+Notons que dans l'option `externals` nous avons exclus les fichiers CSS. C'est parce que les fichiers CSS importés par dépendances doivent quand même être gérés par webpack. Si vous importez n'importe quels autres types de fichier également pris en charge par webpack (ex : `*.vue`, `*.styl`), vous pouvez également les ajouter à la liste des exceptions.
 
 Si vous utilisez `runInNewContext: 'once'` ou `runInNewContext: true`, alors vous devrez également ajouter aux exceptions les polyfills qui modifient `global` comme par ex. `babel-polyfill`. Cela est dû au fait qu'en utilisant un nouveau mode de contexte, **le code à l'intérieur d'un paquetage serveur a son propre objet `global`.** Parce qu'il n'est plus nécessaire de faire cela côté serveur en utilisant Node.js 7.6+, c'est d'autant plus facile de ne les importer que côté client.
 
