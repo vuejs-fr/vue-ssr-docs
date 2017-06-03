@@ -1,10 +1,10 @@
 # Configuration de pré-compilation
 
-Nous allons suposez que vous savez déjà comment configurer webpack pour un projet uniquement client. La configuration pour un projet avec du SSR va être en grande partie similaire, mais nous vous sugérons de séparer vos configurations en trois fichiers : *base*, *client* et *server*. La configuration base contient la configuration partagée par les deux environnements, comme les chemin de sortie, les aliases et les chargeurs (« loaders »). La configuration du serveur et la configuration du client peut simplementent éteindre la configuration de base en utilisant [webpack-merge](https://github.com/survivejs/webpack-merge).
+Nous allons suposez que vous savez déjà comment configurer webpack pour un projet uniquement client. La configuration pour un projet avec du SSR va être en grande partie similaire, mais nous vous sugérons de séparer vos configurations en trois fichiers : *base*, *client* et *server*. La configuration de base contient la configuration partagée par les deux environnements, comme les chemins de sortie, les aliases et les loaders. La configuration du serveur et la configuration du client peut simplement étendre la configuration de base en utilisant [webpack-merge](https://github.com/survivejs/webpack-merge).
 
 ## Configuration serveur
 
-La configuration serveur est destineé à générer le paquetage serveur qui va être passé à `createBundleRenderer`. Elle devrait ressembler à cela :
+La configuration serveur est destinée à générer le paquetage serveur qui va être passé à `createBundleRenderer`. Elle devrait ressembler à cela :
 
 ``` js
 const merge = require('webpack-merge')
@@ -16,7 +16,7 @@ module.exports = merge(baseConfig, {
   // Fichier d'entrée serveur de l'application
   entry: '/path/to/entry-server.js',
 
-  // Cela permet a webpack de gérer les imports dynamique d'une manière
+  // Cela permet à webpack de gérer les imports dynamiques d'une manière
   // approprié pour Node.js, et dit également à `vue-loader` d'émettre un code approprié pour le serveur
   // lors de la compilation du composant Vue.
   target: 'node',
@@ -35,7 +35,7 @@ module.exports = merge(baseConfig, {
   // et génère un fichier de paquetage plus petit.
   externals: nodeExternals({
     // ne pas externaliser les dépendances qui ont besoin d'être traitées par webpack.
-    // vous pouvez ajouter plus de type de fichier comme par ex. ici avec les fichiers `*.vue`
+    // vous pouvez ajouter plus de types de fichier comme par ex. ici, avec les fichiers `*.vue`
     // vous devriez aussi lister des exceptions qui modifient `global` (par ex. les polyfills)
     whitelist: /\.css$/
   }),
@@ -60,11 +60,11 @@ const renderer = createBundleRenderer('/path/to/vue-ssr-server-bundle.json', {
 
 Vous pouvez alternativement tout aussi bien passer le paquetage comme un objet à `createBundleRenderer`. Cela est utile pour le rechargement à chaud pendant le développement. Voyez la démo de HackerNews pour une [référence de mise en place](https://github.com/vuejs/vue-hackernews-2.0/blob/master/build/setup-dev-server.js).
 
-### Limitation externes
+### Limitations externes
 
-Notons que dans l'options `externals` nous avons exclus les fichiers CSS. Cela parceque les fichiers CSS importés par dépendances doivent quand même être gérés par webpack. Si vous importer n'importe quel autres types de fichiers également pris en charge par webpack (ex : `*.vue`, `*.styl`), vous pouvez les ajouter à la liste des exceptions également.
+Notons que dans l'options `externals` nous avons exclus les fichiers CSS. Cela parce que les fichiers CSS importés par dépendances doivent quand même être gérés par webpack. Si vous importez n'importe quels autres types de fichier également pris en charge par webpack (ex : `*.vue`, `*.styl`), vous pouvez également les ajouter à la liste des exceptions.
 
-Si vous utilisez `runInNewContext: 'once'` ou `runInNewContext: true`, alors vous devrez également ajouter aux exceptions les polyfills qui modifient `global` comme par ex. `babel-polyfill`. Cela est du au fait qu'en utilisant un nouveau mode de contexte, **le code à l'intérieur d'un paquetage serveur a son propre objet `global`.** Parceque il n'est plus nécéssaire de faire cela côté serveur en utilisant Node.js 7.6+, c'est d'autant plus facile de ne les importer seulement côté client.
+Si vous utilisez `runInNewContext: 'once'` ou `runInNewContext: true`, alors vous devrez également ajouter aux exceptions les polyfills qui modifient `global` comme par ex. `babel-polyfill`. Cela est dû au fait qu'en utilisant un nouveau mode de contexte, **le code à l'intérieur d'un paquetage serveur a son propre objet `global`.** Parce qu'il n'est plus nécessaire de faire cela côté serveur en utilisant Node.js 7.6+, c'est d'autant plus facile de ne les importer que côté client.
 
 ## Configuration cliente
 
@@ -74,15 +74,15 @@ La configuration cliente peut être en grande partie la même grâce à la confi
 
 > requiert la version 2.3.0+
 
-En plus du paquetage serveur, nous pouvons également générer un build de manifeste client. Avec le manifeste client et le paquetage serveur, le moteur a maintenant les informations du build serveur *et* du build client, ainsi il peut automatiquement déduire et injecter les [directives pré-chargée et récupérée](https://css-tricks.com/prefetching-preloading-prebrowsing/) ainsi que les balise `<link>` / `<script>` dans le rendu HTML.
+En plus du paquetage serveur, nous pouvons également générer un build de manifeste client. Avec le manifeste client et le paquetage serveur, le moteur a maintenant les informations du build serveur *et* du build client, ainsi il peut automatiquement déduire et injecter les [directives pré-chargées et récupérées](https://css-tricks.com/prefetching-preloading-prebrowsing/) ainsi que les balises `<link>` / `<script>` dans le rendu HTML.
 
 Les bénéfices sont doubles :
 
 1. Il peut remplacer le plugin `html-webpack-plugin` pour l'injection correcte d'URLs de fichiers quand il y a des hashs dans les noms de fichier générés.
 
-2. Lors du rendu d'un paquetage qui s'appuie sur les fonctionnalités de scission de code à la demande de webpack, nous pouvons être assuré que les fragments optimaux sont pré-chargées / récupérées, et intéligemment injecter les balises `<script>` des fragments asynchrones nécessaires pour éviter la cascade de requête depuis le client, et ainsi améliorer le TTI (« time-to-interactive »).
+2. Lors du rendu d'un paquetage qui s'appuie sur les fonctionnalités de scission de code à la demande de webpack, nous pouvons être assuré que les fragments optimaux sont pré-chargés / récupérés, et que les balises `<script>` des fragments asynchrones nécessaires pour éviter la cascade de requête depuis le client sont intelligemment injectés. Cela améliore le TTI (« time-to-interactive »).
 
-Pour tirer partie du manifeste client, la configuration cliente devrait resembler à ça :
+Pour tirer partie du manifeste client, la configuration cliente devrait ressembler à ça :
 
 ``` js
 const webpack = require('webpack')
@@ -131,7 +131,7 @@ Avec cette mise en place, votre rendu HTML côté serveur pour un build avec sci
     <link rel="preload" href="/manifest.js" as="script">
     <link rel="preload" href="/main.js" as="script">
     <link rel="preload" href="/0.js" as="script">
-    <!-- les fragments asynchrones non utilisé vont seulement être récupéré (priorité basse) -->
+    <!-- les fragments asynchrones non utilisés vont seulement être récupérés (priorité basse) -->
     <link rel="prefetch" href="/1.js" as="script">
   </head>
   <body>
@@ -148,7 +148,7 @@ Avec cette mise en place, votre rendu HTML côté serveur pour un build avec sci
 
 ### Injection manuel des fichiers
 
-Par défaut, l'injection des fichiers est automatiques quand vous fournissez l'option de rendu `template`. Mais parfois vous aurez besoin d'une granularité de contrôle plus fine en ce qui concerne la manière dont les templates seront injectés, ou peut-être que vous n'utiliserez pas de template du tout. Dans tous les cas, vous pouvez passer `inject: false` quand le moteur est créer et manuellement réaliser l'injection des fichiers.
+Par défaut, l'injection des fichiers est automatique quand vous fournissez l'option de rendu `template`. Mais parfois vous aurez besoin d'une granularité de contrôle plus fine en ce qui concerne la manière dont les templates seront injectés, ou peut-être que vous n'utiliserez pas de template du tout. Dans tous les cas, vous pouvez passer `inject: false` quand le moteur est créé et manuellement réaliser l'injection des fichiers.
 
 Dans la fonction de rappel de `renderToString`, l'objet `context` que vous passez va exposer les méthodes suivantes :
 
@@ -184,20 +184,20 @@ Dans la fonction de rappel de `renderToString`, l'objet `context` que vous passe
 
   - requiert `clientManifest`
 
-  Cette méthode retourne les balises `<link rel="preload/prefetch">` nécessaire au rendu optimisé de la page. Par défaut ce sera :
+  Cette méthode retourne les balises `<link rel="preload/prefetch">` nécessaires au rendu optimisé de la page. Par défaut ce sera :
 
-  - Pré-chargement (récupération et exécution) des fichiers JavaScript et CSS requis par la page
-  - Récupération asynchrones des fragments JavaScript qui seront nécessaire plus tard
+  - Pré-chargement (récupération et exécution) des fichiers JavaScript et CSS requis par la page,
+  - Récupération asynchrones des fragments JavaScript qui seront nécessaires plus tard.
 
-  Les fichiers pré-chargés peuvent être personnalisé plus en profondeur avec l'option [`shouldPreload`](./api.md#shouldpreload).
+  Les fichiers pré-chargés peuvent être personnalisés plus en profondeur avec l'option [`shouldPreload`](./api.md#shouldpreload).
 
 - `context.getPreloadFiles()`
 
   - requiert `clientManifest`
 
-  Cette méthode ne retourne pas de chaîne de caractère. À la place elle retourne un tableau d'objets fichier représentant les fichiers qui devrait être pré-chargés. Cela peut-être utilisé pour programatiquement réaliser de l'augmentation serveur HTTP/2.
+  Cette méthode ne retourne pas de chaîne de caractère. À la place elle retourne un tableau d'objets représentant les fichiers qui devraient être pré-chargés. Cela peut-être utilisé pour programmatiquement réaliser de l'augmentation serveur HTTP/2.
 
-Puisque le `template` passé à `createBundleRenderer` va être interpolé en utilisant le `context`, vous pouvez utiliser ces méthodes à l'interieur de celui-ci (with `inject: false`) :
+Puisque le `template` passé à `createBundleRenderer` va être interpolé en utilisant le `context`, vous pouvez utiliser ces méthodes à l’intérieur de celui-ci (with `inject: false`) :
 
 ``` html
 <html>
@@ -214,4 +214,4 @@ Puisque le `template` passé à `createBundleRenderer` va être interpolé en ut
 </html>
 ```
 
-Si vous n'utilisez pas `template` du tout, vous pouvez concatener les chaînes vous-mêmes.
+Si vous n'utilisez pas `template` du tout, vous pouvez concaténer les chaînes vous-mêmes.
