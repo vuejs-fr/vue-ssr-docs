@@ -160,7 +160,6 @@ Dans la fonction de rappel de `renderToString`, l'objet `context` que vous passe
 
 - `context.renderState(options?: Object)`
 
-
   Cette méthode sérialise `context.state` et retourne une balise script qui contient l'état avec `window.__INITIAL_STATE__`.
 
   La clé et la valeur de l'état peuvent être tous les deux passés dans l'objet d'option :
