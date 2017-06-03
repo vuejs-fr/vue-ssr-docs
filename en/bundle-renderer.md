@@ -24,7 +24,7 @@ Même si c'est simple, à chaque fois que vous éditez votre code source à ce s
 
 ---
 
-Nous allons discuter de la manière de configurer webpack pour générer les artefacts de build nécessaire au moteur de dépaquetage dans la prochaine section, mais pour le moment, imaginons que nous ayons déjà ce dont nous avons besoin. Voici comment créer et utiliser un moteur de dépaquetage :
+Nous allons discuter de la manière de configurer webpack pour générer les artefacts de build nécessaires au moteur de dépaquetage dans la prochaine section, mais pour le moment, imaginons que nous ayons déjà ce dont nous avons besoin. Voici comment créer et utiliser un moteur de dépaquetage :
 
 ``` js
 const { createBundleRenderer } = require('vue-server-renderer')
@@ -49,4 +49,4 @@ server.get('*', (req, res) => {
 
 Quand `renderToString` est appelé sur le moteur de dépaquetage, il va automatiquement exécuté la fonction exportée par le paquetage pour créer une instance de l'application (en passant `context` comme argument) puis va en faire le rendu.
 
-Notons qu'il est recommandé de mettre l'option `runInNewContext` à `false` ou `'once'`. Plus de détails dans [la référence de l'API](./api.md#runinnewcontext).
+Notons qu'il est recommandé de mettre l'option `runInNewContext` à `false` ou à `'once'`. Plus de détails dans [la référence de l'API](./api.md#runinnewcontext).
