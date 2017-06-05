@@ -4,7 +4,7 @@
 - [Routage et scission du code](routing.md)
 - [Récupération de données et état](data.md)
 - [Hydratation côté client](hydration.md)
-- [Introduction à l'empaquetage](bundle-renderer.md)
+- [Introduction au moteur de dépaquetage](bundle-renderer.md)
 - [Configuration de pré-compilation](build-config.md)
 - [Gestion des CSS (En)](css.md)
 - [Gestion des entêtes (En)](head.md)
