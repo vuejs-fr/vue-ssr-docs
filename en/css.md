@@ -2,11 +2,11 @@
 
 La gestion recommandée pour l'utilisation des CSS est de simplement utiliser une balise `<style>` à l'intérieur d'un fichier de composant monopage `*.vue`. Cela permet :
 
-- Une sortie CSS limitée au composant
-- La possibilité d'utiliser des pré-processeurs ou PostCSS
-- Le rechargement à chaud pendant le développement
+- une sortie CSS limitée au composant,
+- la possibilité d'utiliser des pré-processeurs ou PostCSS,
+- le rechargement à chaud pendant le développement.
 
-Et plus important, `vue-style-loader`, le loader utilisé en interne par `vue-loader`, a plusieurs fonctionnalités pour le rendu côté serveur :
+Plus important encore, `vue-style-loader`, le loader utilisé en interne par `vue-loader`, a plusieurs fonctionnalités pour le rendu côté serveur :
 
 - Expérience de création universelle côté client et côté serveur.
 
