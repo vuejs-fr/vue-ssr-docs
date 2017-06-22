@@ -12,13 +12,13 @@ Plus important encore, `vue-style-loader`, le loader utilisé en interne par `vu
 
 - Création automatique de CSS critique lors de l'utilisation de `bundleRenderer`.
 
-  S'il est utilisé pendant le rendu côté serveur, un composant CSS peut être récupéré et injecté dans la source HTML (automatiquement injecté avec l'option `template`). Côté client, quand le composant est utilisé pour la première fois, `vue-style-loader` va vérifier s'il n'y a pas déjà une sortie CSS dans la source HTML pour ce composant ; si non, le CSS va être automatiquement injecté via une balise `<stlye>`.
+  S'il est utilisé pendant le rendu côté serveur, un composant CSS peut être récupéré et injecté dans la source HTML (automatiquement pris en charge avec l'option `template`). Côté client, quand le composant est utilisé pour la première fois, `vue-style-loader` va vérifier s'il n'y a pas déjà une sortie CSS dans la source HTML pour ce composant ; si non, le CSS va être automatiquement injecté via une balise `<stlye>`.
 
 - Extraction de CSS commun.
 
   Cette mise en place supporte [`extract-text-webpack-plugin`](https://github.com/webpack-contrib/extract-text-webpack-plugin) pour extraire le CSS du fragment principal en un fichier CSS séparé (automatiquement injecté avec l'option `template`), ce qui permet au fichier d'être mis en cache individuellement. Cela est recommandé quand il y a beaucoup de CSS partagés.
 
-  Les CSS a l'intérieur des composants asynchrones vont être compilés en tant que chaîne de caractère JavaScript et pris en charge par `vue-style-loader`.
+  Les CSS a l'intérieur des composants asynchrones vont être compilés en tant que chaîne de caractères JavaScript et pris en charge par `vue-style-loader`.
 
 ## Activer l'extraction CSS
 
