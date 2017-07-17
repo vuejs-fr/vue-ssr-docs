@@ -1,8 +1,8 @@
-# Réference de l'API
+# Référence de l'API
 
 ## `createRenderer([options])`
 
-Créer une instance de [`Renderer`](#class-renderer) avec des [options](#renderer-options) optionelles.
+Créer une instance de [`Renderer`](#class-renderer) avec des [options](#renderer-options) optionnelles.
 
 ``` js
 const { createRenderer } = require('vue-server-renderer')
@@ -11,7 +11,7 @@ const renderer = createRenderer({ ... })
 
 ## `createBundleRenderer(bundle[, options])`
 
-Créer une instance de [`BundleRenderer`](#class-bundlerenderer) avec un paquetage serveur et des [options](#renderer-options) optionelles.
+Créer une instance de [`BundleRenderer`](#class-bundlerenderer) avec un paquetage serveur et des [options](#renderer-options) optionnelles.
 
 ``` js
 const { createBundleRenderer } = require('vue-server-renderer')
@@ -56,21 +56,21 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   Le modèle de page supporte également l'interpolation basique en utilisant le contexte du rendu :
 
-  - Utilisez les double moustaches pour de l'interpolation avec HTML échappé et
-  - Utilisez les triple moustaches pour de l'interpolation avec HTML non échappé.
+  - utilisez les double moustaches pour de l'interpolation avec HTML échappé et
+  - utilisez les triple moustaches pour de l'interpolation avec HTML non échappé.
 
   Le modèle de page injecte automatiquement le contenu quand certaines données sont trouvées dans le contexte du rendu :
 
-  - `context.head`: (string) n'importe quel balise d'entête qui devrait être injectée dans la balise `<head>` de la page.
+  - `context.head`: (string) n'importe quelle balise d'entête qui devrait être injectée dans la balise `<head>` de la page.
 
-  - `context.styles`: (string) n'importe quel CSS qui devrait être injecté dans la balide `<head>` de la page. Notez que cette propriété va automatiquement être injectée si vous utilisez `vue-loader` + `vue-style-loader` pour la CSS de vos composants.
+  - `context.styles`: (string) n'importe quel CSS qui devrait être injectée dans la balide `<head>` de la page. Notez que cette propriété va automatiquement être injectée si vous utilisez `vue-loader` + `vue-style-loader` pour la CSS de vos composants.
 
   - `context.state`: (Object) L'état initial du store Vuex devrait être injecté dans la page sous la variable `window.__INITIAL_STATE__`. Le JSON en ligne est automatiquement désinfecté avec [serialize-javascript](https://github.com/yahoo/serialize-javascript) pour éviter les injections XSS.
 
   En plus, quand `clientManifest` est fourni, le modèle de page injecte automatiquement les éléments suivants :
 
   - JavaScript client et fichiers CSS nécessaire pour le rendu (avec les fragments asynchrones automatiquement déduit),
-  - Utilisation optimal des indices de ressources `<link rel="preload/prefetch">` pour le rendu de la page.
+  - utilisation optimal des indices de ressources `<link rel="preload/prefetch">` pour le rendu de la page.
 
   Vous pouvez désactiver toutes ces injections en passant `inject: false` au moteur de rendu.
 
@@ -89,36 +89,36 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   - 2.3.0+
 
-  Controls whether to perform automatic injections when using `template`. Defaults to `true`.
+  Contrôle la manière d'exécuter des injections automatique en utilisant `template`. Par défaut à `true`.
 
-  See also: [Manual Asset Injection](./build-config.md#manual-asset-injection).
+  Voir aussi : [Injection manuel des fichiers](./build-config.md#injection-manuel-des-fichiers).
 
 - #### `shouldPreload`
 
   - 2.3.0+
 
-  A function to control what files should have `<link rel="preload">` resource hints generated.
+  Une fonction pour contrôler quels fichiers doivent avoir une ressource d'indice `<link rel="preload">` de générée.
 
-  By default, only JavaScript and CSS files will be preloaded, as they are absolutely needed for your application to boot.
+  Par défaut, seuls les fichiers JavaScript et les fichiers CSS seront pré-chargés, car ils sont absolument nécessaire pour le démarrage de l'application.
 
-  For other types of assets such as images or fonts, preloading too much may waste bandwidth and even hurt performance, so what to preload will be scenario-dependent. You can control precisely what to preload using the `shouldPreload` option:
+  Pour les autres types de fichiers comme les images et les polices, le pré-chargement pouvant gâcher de la bande passante inutilement et même baisser les performances, il est laissé à votre appréciation. Vous pouvez contrôler précisément le pré-chargement en utilisant l'option `shouldPreload` :
 
   ``` js
   const renderer = createBundleRenderer(bundle, {
     template,
     clientManifest,
     shouldPreload: (file, type) => {
-      // type is inferred based on the file extension.
+      // le type est déduit en se basant sur l'extension du fichier.
       // https://fetch.spec.whatwg.org/#concept-request-destination
       if (type === 'script' || type === 'style') {
         return true
       }
       if (type === 'font') {
-        // only preload woff2 fonts
+        // pré-charger uniquement les polices woff2
         return /\.woff2$/.test(file)
       }
       if (type === 'image') {
-        // only preload important images
+        // charger uniquement les images importantes
         return file === 'hero.jpg'
       }
     }
@@ -128,34 +128,34 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 - #### `runInNewContext`
 
   - 2.3.0+
-  - only used in `createBundleRenderer`
-  - Expects: `boolean | 'once'` (`'once'` only supported in 2.3.1+)
+  - seulement utilisée avec `createBundleRenderer`
+  - Requiert : `boolean | 'once'` (`'once'` est seulement supporté dans la 2.3.1+)
 
-  By default, for each render the bundle renderer will create a fresh V8 context and re-execute the entire bundle. This has some benefits - for example, the app code is isolated from the server process and we don't need to worry about the [stateful singleton problem](./structure.md#avoid-stateful-singletons) mentioned in the docs. However, this mode comes at some considerable performance cost because re-executing the bundle is expensive especially when the app gets bigger.
+  Par défaut, pour chaque rendu le moteur de dépaquetage va créer un nouveau contexte V8 et ré-exécuter le paquetage complet. Cela a plusieurs bénéfices, comme par exemple, isoler le code de l'application des processus du serveur ce qui permet d'[Eviter les singletons d'état](./structure.md#eviter-les-singletons-detat) mentionnés dans la documentation. Cependant, ce mode a des coûts de performance importants car ré-exécuter le paquetage est quelque chose de coûteux, surtout quand l'application est grosse.
 
-  This option defaults to `true` for backwards compatibility, but it is recommended to use `runInNewContext: false` or `runInNewContext: 'once'` whenever you can.
+  Cette option est par défaut à `true` pour la rétro-compatibilité, mais il est recommandé d'utiliser `runInNewContext: false` ou `runInNewContext: 'once'` si vous le pouvez.
 
-  > In 2.3.0 this option has a bug where `runInNewContext: false` still executes the bundle using a separate global context. The following information assumes version 2.3.1+.
+  > Dans la 2.3.0 cette option a un bogue car `runInNewContext: false` exécute toujours le paquetage en utilisant un contexte global séparé. Les informations suivantes sont donc valables pour la version 2.3.1+.
 
-  With `runInNewContext: false`, the bundle code will run in the same `global` context with the server process, so be careful about code that modifies `global` in your application code.
+  Avec `runInNewContext: false`, le code de paquetage va tourner dans le même contexte `global` du processus serveur, donc faites attention au code qui modifie `global` dans le code de votre application.
 
-  With `runInNewContext: 'once'` (2.3.1+), the bundle is evaluated in a separate `global` context, however only once at startup. This provides better app code isolation since it prevents the bundle from accidentally polluting the server process' `global` object. The caveats are that:
+  Avec `runInNewContext: 'once'` (2.3.1+), le paquetage est évalué dans un contexte `global` séparé, cependant cela n'est effectué qu'au démarrage. Cela permet une meilleur isolation du code de l'application puisqu'il empêche le paquetage d'accidentellement polluer l'objet `global` du processus serveur. Les limitations sont les suivantes :
 
-  1. Dependencies that modifies `global` (e.g. polyfills) cannot be externalized in this mode;
-  2. Values returned from the bundle execution will be using different global constructors, e.g. an error caught inside the bundle will not be an instance of `Error` in the server process.
+  1. Les dépendances qui modifient l'objet `global` (ex. polyfills) ne peuvent être externalisées dans ce mode,
+  2. Les valeurs retournées lors de l'exécution du paquetage utiliseront des constructeurs globaux différents. Par ex. une erreur levée à l'intérieur du paquetage ne sera pas une instance de `Error` dans le processus serveur.
 
-  See also: [Source Code Structure](./structure.md)
+  Voir aussi : [Structure de code](./structure.md)
 
 - #### `basedir`
 
   - 2.2.0+
-  - only used in `createBundleRenderer`
+  - seulement utilisée avec `createBundleRenderer`
 
-  Explicitly declare the base directory for the server bundle to resolve `node_modules` dependencies from. This is only needed if your generated bundle file is placed in a different location from where the externalized NPM dependencies are installed, or your `vue-server-renderer` is npm-linked into your current project.
+  Déclarer explicitement le dossier de base du paquetage serveur afin de résoudre les dépendances `node_modules`. Cela est nécessaire si le fichier de paquetage généré est placé à un endroit différent de là où les dépendances externes npm sont installées, ou si `vue-server-renderer` est lié à npm dans votre projet courant.
 
 - #### `cache`
 
-  Provide a [component cache](./caching.md#component-level-caching) implementation. The cache object must implement the following interface (using Flow notations):
+  Fournit une implémentation de [Mise en cache au niveau du composant](./caching.md#mise-en-cache-au-niveau-du-composant). L'objet de cache doit implémenter l'interface suivante (utilisation des notations Flow) :
 
   ``` js
   type RenderCache = {
@@ -165,7 +165,7 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
   };
   ```
 
-  A typical usage is passing in an [lru-cache](https://github.com/isaacs/node-lru-cache):
+  Une utilisation typique est de passer un [objet de mise en cache qui supprime l'objet le plus récemment utilisé](https://github.com/isaacs/node-lru-cache) :
 
   ``` js
   const LRU = require('lru-cache')
@@ -177,14 +177,14 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
   })
   ```
 
-  Note that the cache object should at least implement `get` and `set`. In addition, `get` and `has` can be optionally async if they accept a second argument as callback. This allows the cache to make use of async APIs, e.g. a redis client:
+  Notez que cet objet de mise en cache doit au moins implémenter `get` et `set`. De plus `get` et `set` peuvent être optionnellement asynchrone s'ils acceptent en second argument une fonction de rappel. Cela permet à la mise en cache d'utiliser des APIs. Par ex. un client Redis :
 
   ``` js
   const renderer = createRenderer({
     cache: {
       get: (key, cb) => {
         redisClient.get(key, (err, res) => {
-          // handle error if any
+          // gérer les erreur s'il y en a
           cb(res)
         })
       },
@@ -197,35 +197,35 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
 - #### `directives`
 
-  Allows you to provide server-side implementations for your custom directives:
+  Vous permet de fournir des implémentations côté serveur pour vos directives personnalisées :
 
   ``` js
   const renderer = createRenderer({
     directives: {
       example (vnode, directiveMeta) {
-        // transform vnode based on directive binding metadata
+        // transformer les vnode en directive de liaison de metadata
       }
     }
   })
   ```
 
-  As an example, check out [`v-show`'s server-side implementation](https://github.com/vuejs/vue/blob/dev/src/platforms/web/server/directives/show.js).
+  Consultez l'[implementation de `v-show` côté serveur](https://github.com/vuejs/vue/blob/dev/src/platforms/web/server/directives/show.js) en tant qu'exemple.
 
-## webpack Plugins
+## Plugins webpack
 
-The webpack plugins are provided as standalone files and should be required directly:
+Les pluging webpack sont fournis en fichiers autonomes et devraient être requis en direct :
 
 ``` js
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 ```
 
-The default files generated are:
+Les fichiers générés par défaut sont :
 
-- `vue-ssr-server-bundle.json` for the server plugin;
-- `vue-ssr-client-manifest.json` for the client plugin.
+- `vue-ssr-server-bundle.json` pour le plugin serveur,
+- `vue-ssr-client-manifest.json` pour le plugin client.
 
-The filenames can be customized when creating the plugin instances:
+Les noms de fichiers peuvent être personnalisés lors de la création des instances des plugins :
 
 ``` js
 const plugin = new VueSSRServerPlugin({
@@ -233,4 +233,4 @@ const plugin = new VueSSRServerPlugin({
 })
 ```
 
-See [Build Configuration](./build-config.md) for more information.
+Voir la [Configuration de pré-compilation](./build-config.md) pour plus d'informations.

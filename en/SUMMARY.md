@@ -10,7 +10,7 @@
 - [Gestion des entêtes (En)](head.md)
 - [Mise en cache (En)](caching.md)
 - [Envoi par flux (En)](streaming.md)
-- [Réference de l'API](api.md)
+- [Référence de l'API](api.md)
   - [createRenderer](api.md#createrendereroptions)
   - [createBundleRenderer](api.md#createbundlerendererbundle-options)
   - [Class: Renderer](api.md#class-renderer)
