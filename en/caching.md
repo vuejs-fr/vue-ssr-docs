@@ -1,6 +1,6 @@
 # Mise en cache
 
-Même si le SSR de Vue est très rapide, il ne peut égaler les performances d'un template utilisant une chaîne de caractères pure du fait du coût de la création des instances de composants et des nœuds du DOM virtuel. Dans le cas ou les performances du SSR seraient critique, il est conseillé d'utiliser une stratégie de mise en cache pour améliorer significativement le temps de réponse et réduire la charge du serveur.
+Même si le SSR de Vue est très rapide, il ne peut égaler les performances d'un rendu utilisant une chaîne de caractères pure du fait du coût de la création des instances de composants et des nœuds du DOM virtuel. Dans le cas ou les performances du SSR seraient critique, il est conseillé d'utiliser une stratégie de mise en cache pour améliorer significativement le temps de réponse et réduire la charge du serveur.
 
 ## Mise en cache au niveau de la page
 
