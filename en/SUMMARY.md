@@ -8,7 +8,7 @@
 - [Configuration de pré-compilation](build-config.md)
 - [Gestion des CSS](css.md)
 - [Gestion des entêtes (En)](head.md)
-- [Mise en cache (En)](caching.md)
+- [Mise en cache](caching.md)
 - [Envoi par flux (En)](streaming.md)
 - [Réference de l'API (En)](api.md)
   - [createRenderer (En)](api.md#createrendereroptions)
