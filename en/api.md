@@ -36,7 +36,7 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
 - #### `renderer.renderToStream(vm[, context])`
 
-  Faire le rendu d'une instance de Vue sous forme de flux. L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
+  Fait le rendu d'une instance de Vue sous forme de flux. L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
 
 ## `Class: BundleRenderer`
 
