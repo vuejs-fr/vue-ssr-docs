@@ -7,7 +7,7 @@
 - [Introduction au moteur de dépaquetage](bundle-renderer.md)
 - [Configuration de pré-compilation](build-config.md)
 - [Gestion des CSS](css.md)
-- [Gestion des entêtes (En)](head.md)
+- [Gestion des entêtes](head.md)
 - [Mise en cache (En)](caching.md)
 - [Envoi par flux (En)](streaming.md)
 - [Réference de l'API (En)](api.md)
