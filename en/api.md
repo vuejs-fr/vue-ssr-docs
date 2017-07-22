@@ -2,7 +2,7 @@
 
 ## `createRenderer([options])`
 
-Créer une instance de [`Renderer`](#class-renderer) avec des [options](#renderer-options) optionnelles.
+Crée une instance de [`Renderer`](#class-renderer) avec des [options](#renderer-options) optionnelles.
 
 ``` js
 const { createRenderer } = require('vue-server-renderer')
@@ -11,7 +11,7 @@ const renderer = createRenderer({ ... })
 
 ## `createBundleRenderer(bundle[, options])`
 
-Créer une instance de [`BundleRenderer`](#class-bundlerenderer) avec un paquetage serveur et des [options](#renderer-options) optionnelles.
+Crée une instance de [`BundleRenderer`](#class-bundlerenderer) avec un paquetage serveur et des [options](#renderer-options) optionnelles.
 
 ``` js
 const { createBundleRenderer } = require('vue-server-renderer')
@@ -20,7 +20,7 @@ const renderer = createBundleRenderer(serverBundle, { ... })
 
 L'argument `serverBundle` peut être l'un des éléments suivants :
 
-- Un chemin absolue pour générer un fichier de paquetage (`.js` ou `.json`). Doit commencer par `/` pour être considéré comme un chemin de fichier.
+- Un chemin absolu pour générer un fichier de paquetage (`.js` ou `.json`). Doit commencer par `/` pour être considéré comme un chemin de fichier.
 
 - Un objet de paquetage généré par webpack + `vue-server-renderer/server-plugin`.
 
@@ -32,7 +32,7 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
 - #### `renderer.renderToString(vm[, context], callback)`
 
-  Faire le rendu d'une instance de Vue sous forme de chaîne de caractères. L'objet de contexte est optionnel. La fonction de rappel est une fonction de rappel typique de Node.js avec en premier argument l'erreur potentielle et en second argument la chaîne de caractères du rendu.
+  Fait le rendu d'une instance de Vue sous forme de chaîne de caractères. L'objet de contexte est optionnel. La fonction de rappel est une fonction de rappel typique de Node.js avec en premier argument l'erreur potentielle et en second argument la chaîne de caractères du rendu.
 
 - #### `renderer.renderToStream(vm[, context])`
 
@@ -42,11 +42,11 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
 - #### `bundleRenderer.renderToString([context, ]callback)`
 
-  Faire le rendu d'un paquetage sous forme de chaîne de caractères. L'objet de contexte est optionnel. La fonction de rappel est une fonction de rappel typique de Node.js avec en premier argument l'erreur potentielle et en second argument la chaîne de caractères du rendu.
+  Fait le rendu d'un paquetage sous forme de chaîne de caractères. L'objet de contexte est optionnel. La fonction de rappel est une fonction de rappel typique de Node.js avec en premier argument l'erreur potentielle et en second argument la chaîne de caractères du rendu.
 
 - #### `bundleRenderer.renderToStream([context])`
 
-  Faire le rendu d'un paquetage sous forme de flux. L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
+  Fait le rendu d'un paquetage sous forme de flux. L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
 
 ## Options de `Renderer`
 
@@ -63,13 +63,13 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   - `context.head`: (string) n'importe quelle balise d'entête qui devrait être injectée dans la balise `<head>` de la page.
 
-  - `context.styles`: (string) n'importe quel CSS qui devrait être injectée dans la balide `<head>` de la page. Notez que cette propriété va automatiquement être injectée si vous utilisez `vue-loader` + `vue-style-loader` pour la CSS de vos composants.
+  - `context.styles`: (string) n'importe quelle CSS qui devrait être injectée dans la balide `<head>` de la page. Notez que cette propriété va automatiquement être injectée si vous utilisez `vue-loader` + `vue-style-loader` pour la CSS de vos composants.
 
   - `context.state`: (Object) L'état initial du store Vuex devrait être injecté dans la page sous la variable `window.__INITIAL_STATE__`. Le JSON en ligne est automatiquement désinfecté avec [serialize-javascript](https://github.com/yahoo/serialize-javascript) pour éviter les injections XSS.
 
   En plus, quand `clientManifest` est fourni, le modèle de page injecte automatiquement les éléments suivants :
 
-  - JavaScript client et fichiers CSS nécessaire pour le rendu (avec les fragments asynchrones automatiquement déduit),
+  - JavaScript client et fichiers CSS nécessaires pour le rendu (avec les fragments asynchrones automatiquement déduits),
   - utilisation optimal des indices de ressources `<link rel="preload/prefetch">` pour le rendu de la page.
 
   Vous pouvez désactiver toutes ces injections en passant `inject: false` au moteur de rendu.
@@ -77,21 +77,21 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
   Voir également :
 
   - [Utiliser un modèle de page](./basic.md#utiliser-un-modele-de-page)
-  - [Injection manuel des fichiers](./build-config.md#injection-manuel-des-fichiers)
+  - [Injection manuelle des fichiers](./build-config.md#injection-manuelle-des-fichiers)
 
 - #### `clientManifest`
 
   - 2.3.0+
 
-  Fournit un objet de build de manifeste généré par `vue-server-renderer/client-plugin`. Le manifeste client fournit le paquetage de moteur de rendu avec ses propres informations pour l'injection automatique de fichier dans le modèle de page HTML. Pour plus de détails, consultez [Générer le `clientManifest`](./build-config.md#generer-le-clientmanifest).
+  Fournit un objet de build de manifeste généré par `vue-server-renderer/client-plugin`. Le manifeste client fournit le paquetage de moteur de rendu avec ses propres informations pour l'injection automatique de fichiers dans le modèle de page HTML. Pour plus de détails, consultez [Générer le `clientManifest`](./build-config.md#generer-le-clientmanifest).
 
 - #### `inject`
 
   - 2.3.0+
 
-  Contrôle la manière d'exécuter des injections automatique en utilisant `template`. Par défaut à `true`.
+  Contrôle la manière d'exécuter des injections automatiques en utilisant `template`. Par défaut à `true`.
 
-  Voir aussi : [Injection manuel des fichiers](./build-config.md#injection-manuel-des-fichiers).
+  Voir aussi : [Injection manuelle des fichiers](./build-config.md#injection-manuelle-des-fichiers).
 
 - #### `shouldPreload`
 
@@ -99,9 +99,9 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   Une fonction pour contrôler quels fichiers doivent avoir une ressource d'indice `<link rel="preload">` de générée.
 
-  Par défaut, seuls les fichiers JavaScript et les fichiers CSS seront pré-chargés, car ils sont absolument nécessaire pour le démarrage de l'application.
+  Par défaut, seuls les fichiers JavaScript et les fichiers CSS seront pré-chargés, car ils sont absolument nécessaires pour le démarrage de l'application.
 
-  Pour les autres types de fichiers comme les images et les polices, le pré-chargement pouvant gâcher de la bande passante inutilement et même baisser les performances, il est laissé à votre appréciation. Vous pouvez contrôler précisément le pré-chargement en utilisant l'option `shouldPreload` :
+  Pour les autres types de fichiers comme les images et les polices, le pré-chargement pouvant gâcher de la bande passante inutilement et même baisser les performances, cela est laissé à votre appréciation. Vous pouvez contrôler précisément le pré-chargement en utilisant l'option `shouldPreload` :
 
   ``` js
   const renderer = createBundleRenderer(bundle, {
@@ -131,7 +131,7 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
   - seulement utilisée avec `createBundleRenderer`
   - Requiert : `boolean | 'once'` (`'once'` est seulement supporté dans la 2.3.1+)
 
-  Par défaut, pour chaque rendu le moteur de dépaquetage va créer un nouveau contexte V8 et ré-exécuter le paquetage complet. Cela a plusieurs bénéfices, comme par exemple, isoler le code de l'application des processus du serveur ce qui permet d'[Eviter les singletons d'état](./structure.md#eviter-les-singletons-detat) mentionnés dans la documentation. Cependant, ce mode a des coûts de performance importants car ré-exécuter le paquetage est quelque chose de coûteux, surtout quand l'application est grosse.
+  Par défaut, pour chaque rendu, le moteur de dépaquetage va créer un nouveau contexte V8 et ré-exécuter le paquetage complet. Cela a plusieurs bénéfices, comme par exemple, isoler le code de l'application des processus du serveur ce qui permet d'[Eviter les singletons d'état](./structure.md#eviter-les-singletons-detat) mentionnés dans la documentation. Cependant, ce mode a des coûts de performance importants car ré-exécuter le paquetage est quelque chose de coûteux, surtout quand l'application est grosse.
 
   Cette option est par défaut à `true` pour la rétro-compatibilité, mais il est recommandé d'utiliser `runInNewContext: false` ou `runInNewContext: 'once'` si vous le pouvez.
 
