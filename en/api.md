@@ -141,7 +141,7 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   Une fonction pour contrôler quels fichiers devraient avoir l'indice de ressource `<link rel="prefetch">` généré.
 
-  Par défaut, toutes les ressources sont des morceaux asynchrones qui vont être prérécupérés du fait que se sont des directives de basse priorité. Cependant vous pouvez personnaliser c qui est prérécupérés afin d'avoir un meilleur contrôle sur l'utilisation de la bande passante. Cette option utilise une déclaration de fonction identique à celle de `shouldPreload`.
+  Par défaut, toutes les ressources sont des morceaux asynchrones qui vont être préchargés du fait que se sont des directives de basse priorité. Cependant vous pouvez personnaliser ce qui est préchargé afin d'avoir un meilleur contrôle sur l'utilisation de la bande passante. Cette option utilise une déclaration de fonction identique à celle de `shouldPreload`.
 
 - #### `runInNewContext`
 
