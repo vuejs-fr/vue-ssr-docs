@@ -42,7 +42,7 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
 - #### `renderer.renderToStream(vm[, context]): stream.Readable`
 
-  Render a Vue instance to a [Node.js readble stream](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). The context object is optional. See [Streaming](./streaming.md) for more details.
+  Fait le rendu d'une instance de Vue sous forme de [flux Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
 
 ## `Class: BundleRenderer`
 
