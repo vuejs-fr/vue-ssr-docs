@@ -1,6 +1,6 @@
 # Utilisation dans des environnements autres que Node.js
 
-Le build par défaut de `vue-server-renderer` est créer pour fonctionner dans un environnement Node.js, ce qui le rend inutilisable pour des environnements comme [PHP V8Js](https://github.com/phpv8/v8js) ou [Oracle Nashorn](https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/). Dans la 2.5+, nous avons ajouté un build dans `vue-server-renderer/basic.js` qui est très largement agnostique en matière d'environnement, le rendant utilisable dans les environnements mentionnés précédemment.
+Le build par défaut de `vue-server-renderer` est créé pour fonctionner dans un environnement Node.js, ce qui le rend inutilisable pour des environnements comme [PHP V8Js](https://github.com/phpv8/v8js) ou [Oracle Nashorn](https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/). Dans la 2.5+, nous avons ajouté un build dans `vue-server-renderer/basic.js` qui est très largement agnostique en matière d'environnement, le rendant utilisable dans les environnements mentionnés précédemment.
 
 Pour les deux environnements, il est nécessaire de d'abord préparer l'environnement en simulant les objets `global` et `process` avec `process.env.VUE_ENV` mis à `"server"` et `process.env.NODE_ENV` mis à `"development"` ou `"production"`.
 
