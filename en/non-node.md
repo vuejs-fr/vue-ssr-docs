@@ -1,12 +1,12 @@
-# Usage in non-Node.js Environments
+# Utilisation dans des environnements autres que Node.js
 
-The default build of `vue-server-renderer` assumes a Node.js environment, which makes it unusable in alternative JavaScript environments such as [php-v8js](https://github.com/phpv8/v8js) or [Nashorn](https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/). In 2.5 we have shipped a build in `vue-server-renderer/basic.js` that is largely environment-agnostic, which makes it usable in the environments mentioned above.
+Le build par défaut de `vue-server-renderer` est créé pour fonctionner dans un environnement Node.js, ce qui le rend inutilisable pour des environnements comme [PHP V8Js](https://github.com/phpv8/v8js) ou [Oracle Nashorn](https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/). Dans la 2.5+, nous avons ajouté un build dans `vue-server-renderer/basic.js` qui est très largement agnostique en matière d'environnement, le rendant utilisable dans les environnements mentionnés précédemment.
 
-For both environments, it is necessary to first prepare the environment by mocking the `global` and `process` objects, with `process.env.VUE_ENV` set to `"server"`, and `process.env.NODE_ENV` set to `"development"` or `"production"`.
+Pour les deux environnements, il est nécessaire de d'abord préparer l'environnement en simulant les objets `global` et `process` avec `process.env.VUE_ENV` mis à `"server"` et `process.env.NODE_ENV` mis à `"development"` ou `"production"`.
 
-In Nashorn, it may also be necessary to provide a polyfill for `Promise` or `setTimeout` using Java's native timers.
+Dans Nashorn, il serait également nécessaire de fournir un polyfill pour les `Promise` ou `setTimeout` en utilisant les compteurs natifs Java.
 
-Example usage in php-v8js:
+Exemple d'utilisation avec V8Js :
 
 ``` php
 <?php
@@ -30,11 +30,11 @@ $v8->executeString($app_source);
 var vm = new Vue({
   template: `<div>{{ msg }}</div>`,
   data: {
-    msg: 'hello'
+    msg: 'bonjour'
   }
 })
 
-// exposed by vue-server-renderer/basic.js
+// exposé par `vue-server-renderer/basic.js`
 renderVueComponentToString(vm, (err, res) => {
   print(res)
 })

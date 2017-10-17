@@ -34,15 +34,11 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   Fait le rendu d'une instance de Vue sous forme de chaine de caractères. L'objet de contexte est optionnel. La fonction de rappel est une fonction de rappel typique de Node.js avec en premier argument l'erreur potentielle et en second argument la chaine de caractères du rendu.
 
-  In 2.5.0+, the callback is also optional. When no callback is passed, the method returns a Promise which resolves to the rendered HTML.
+  Dans la 2.5.0+, la fonction de rappel est également optionnelle. Quand aucune fonction de rappel n'est fournie, la méthode retourne une promesse résolue avec le HTML rendu.
 
-<<<<<<< HEAD
-  Fait le rendu d'une instance de Vue sous forme de flux. L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
-=======
 - #### `renderer.renderToStream(vm[, context]): stream.Readable`
 
-  Render a Vue instance to a [Node.js readble stream](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). The context object is optional. See [Streaming](./streaming.md) for more details.
->>>>>>> upstream/master
+  Fait le rendu d'une instance de Vue sous forme de [flux Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
 
 ## `Class: BundleRenderer`
 
@@ -50,15 +46,11 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   Fait le rendu d'un paquetage sous forme de chaine de caractères. L'objet de contexte est optionnel. La fonction de rappel est une fonction de rappel typique de Node.js avec en premier argument l'erreur potentielle et en second argument la chaine de caractères du rendu.
 
-  In 2.5.0+, the callback is also optional. When no callback is passed, the method returns a Promise which resolves to the rendered HTML.
+  Dans la 2.5.0+, la fonction de rappel est également optionnelle. Quand aucune fonction de rappel n'est fournie, la méthode retourne une promesse résolue avec le HTML rendu.
 
 - #### `bundleRenderer.renderToStream([context]): stream.Readable`
 
-<<<<<<< HEAD
-  Fait le rendu d'un paquetage sous forme de flux. L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
-=======
-  Render the bundle to a [Node.js readble stream](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). The context object is optional. See [Streaming](./streaming.md) for more details.
->>>>>>> upstream/master
+  Fait le rendu d'un paquetage sous forme de [flux Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
 
 ## Options de `Renderer`
 
@@ -79,13 +71,9 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   - `context.state`: (Object) L'état initial du store Vuex devrait être injecté dans la page sous la variable `window.__INITIAL_STATE__`. Le JSON en ligne est automatiquement désinfecté avec [serialize-javascript](https://github.com/yahoo/serialize-javascript) pour éviter les injections XSS.
 
-<<<<<<< HEAD
-  En plus, quand `clientManifest` est fourni, le modèle de page injecte automatiquement les éléments suivants :
-=======
-    In 2.5.0+, the embed script also self-removes in production mode.
+    Dans la 2.5.0+, les scripts injectés sont automatiquement retiré en mode production.
 
-  In addition, when `clientManifest` is also provided, the template automatically injects the following:
->>>>>>> upstream/master
+  En plus, quand `clientManifest` est fourni, le modèle de page injecte automatiquement les éléments suivants :
 
   - JavaScript client et fichiers CSS nécessaires pour le rendu (avec les fragments asynchrones automatiquement déduits),
   - utilisation optimale des indices de ressources `<link rel="preload/prefetch">` pour le rendu de la page.
@@ -147,9 +135,9 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   - 2.5.0+
 
-  A function to control what files should have `<link rel="prefetch">` resource hints generated.
+  Une fonction pour contrôler quels fichiers devraient avoir l'indice de ressource `<link rel="prefetch">` généré.
 
-  By default, all assets in async chunks will be prefetched since this is a low-priority directive; however you can customize what to prefetch in order to better control bandwidth usage. This option expects the same function signature as `shouldPreload`.
+  Par défaut, toutes les ressources sont des morceaux asynchrones qui vont être préchargés du fait que se sont des directives de basse priorité. Cependant vous pouvez personnaliser ce qui est préchargé afin d'avoir un meilleur contrôle sur l'utilisation de la bande passante. Cette option utilise une déclaration de fonction identique à celle de `shouldPreload`.
 
 - #### `runInNewContext`
 
