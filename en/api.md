@@ -40,10 +40,6 @@ Voyez l'[Introduction au moteur de dépaquetage](./bundle-renderer.md) et la [Co
 
   Fait le rendu d'une instance de Vue sous forme de [flux Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
 
-- #### `renderer.renderToStream(vm[, context]): stream.Readable`
-
-  Fait le rendu d'une instance de Vue sous forme de [flux Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/stream.html#stream_readable_streams). L'objet de contexte est optionnel. Voir l'[Envoi par flux](./streaming.md) pour plus de détails.
-
 ## `Class: BundleRenderer`
 
 - #### `bundleRenderer.renderToString([context, callback]): ?Promise<string>`
