@@ -15,7 +15,7 @@ git working merge upstream/master
 
 d'obtenir des conflits **sur les pages déjà traduites** et ainsi maintenir la documentation à jour en fonction des modifications à travers **les documents déjà traduits**.
 
-Note : `git remote add upstream https://github.com/vuetifyjs/vuetifyjs.com.git` est nécessaire au préalable pour utiliser les commandes ci-dessus.
+Note : `git remote add upstream https://github.com/vuejs/vue-ssr-docs.git` est nécessaire au préalable pour utiliser les commandes ci-dessus.
 
 ### Traduction
 
