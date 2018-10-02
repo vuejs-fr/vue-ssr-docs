@@ -1,0 +1,19 @@
+/en/            /
+/en/api.html    /api/
+/en/basic.html  /guide/
+/en/*           /guide/:splat
+
+/zh/            /zh/
+/zh/api.html    /zh/api/
+/zh/basic.html  /zh/guide/
+/zh/*           /zh/guide/:splat
+
+/ru/            /ru/
+/ru/api.html    /ru/api/
+/ru/basic.html  /ru/guide/
+/ru/*           /ru/guide/:splat
+
+/ja/            /ja/
+/ja/api.html    /ja/api/
+/ja/basic.html  /ja/guide/
+/ja/*           /ja/guide/:splat
